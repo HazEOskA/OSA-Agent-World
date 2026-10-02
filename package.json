@@ -14,6 +14,11 @@
     "db:seed": "psql \"$DATABASE_URL\" -v ON_ERROR_STOP=1 -f db/seeds/001_reference_seed.sql",
     "db:rollback": "psql \"$DATABASE_URL\" -v ON_ERROR_STOP=1 -f db/migrations/0001_foundation.down.sql"
   },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
+  },
   "devDependencies": {
     "@types/node": "26.6.4",
     "drizzle-kit": "0.31.11",
