@@ -7,7 +7,7 @@
   "scripts": {
     "build": "pnpm -r --if-present build",
     "lint": "eslint \"packages/**/*.ts\" \"db/**/*.ts\"",
-    "typecheck": "pnpm -r --if-present typecheck",
+    "typecheck": "pnpm build && pnpm -r --if-present typecheck",
     "test": "vitest run",
     "ci": "pnpm lint && pnpm typecheck && pnpm test",
     "db:migrate": "psql \"$DATABASE_URL\" -v ON_ERROR_STOP=1 -f db/migrations/0001_foundation.sql",
