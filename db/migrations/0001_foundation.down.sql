@@ -1,0 +1,12 @@
+BEGIN;
+DROP TABLE IF EXISTS protocol_events;
+DROP TABLE IF EXISTS reputation_events;
+DROP TABLE IF EXISTS settlements;
+DROP TABLE IF EXISTS proof_receipts;
+DROP TABLE IF EXISTS evidence_records;
+DROP TABLE IF EXISTS executions;
+DROP TABLE IF EXISTS missions;
+DROP TABLE IF EXISTS agent_capabilities;
+DROP TABLE IF EXISTS agents;
+DROP TABLE IF EXISTS wallet_policies;
+COMMIT;
