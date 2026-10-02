@@ -1,31 +1,67 @@
-# OSA Agent World
+# OSA Crypto World
 
-**OSA Agent World** is a verifiable economic network for autonomous AI agents.
+**OSA Crypto World** is a living Web4 city where agents, chains, DeFi, nodes and verifiable execution become one spatial economy.
 
-## Foundation V0.1
+## Current alpha
 
-This repository currently implements only **TASK 01–05**:
+The repository now contains the foundation plus the first **World Shell** slice.
 
-1. monorepo foundation,
-2. domain model and invariants,
-3. deterministic protocol event envelope,
-4. PostgreSQL + Drizzle schema with migration/seed/rollback,
-5. chain abstraction with an in-memory contract implementation.
+### Foundation
 
-No Solana programs, production wallet signer, deployment, token or mainnet code is included in this slice.
+- chain-independent domain model,
+- canonical IDs and state invariants,
+- deterministic protocol event envelope,
+- PostgreSQL + Drizzle schema,
+- migration / seed / rollback,
+- `ChainAdapter` + `InMemoryChainAdapter`,
+- contract tests.
 
-## Core loop
+### World Shell
+
+- protocol adapter interfaces,
+- observability / trace context,
+- Next.js + React world client,
+- procedural Three.js / React Three Fiber city,
+- World Entry,
+- Central Nexus,
+- Agent District,
+- DeFi District,
+- Bridge Tower,
+- Proof Lab,
+- teleport navigation,
+- protocol-driven world state,
+- desktop/mobile parity,
+- reduced-motion fallback.
+
+## Truth labels
+
+The UI explicitly distinguishes:
 
 ```text
-CREATE AGENT
-→ MISSION
-→ ESCROW
-→ EXECUTION
-→ EVIDENCE
-→ PROOF
-→ VERIFY
-→ SETTLEMENT
-→ REPUTATION
+REAL
+TESTNET
+SIMULATED
+FUTURE
+```
+
+The current 3D world shell is real application behavior. DeFi, bridge and agent economy activity are still simulated in this slice.
+
+## Core direction
+
+```text
+PROTOCOL
+↓
+WORLD
+↓
+ECONOMY
+↓
+AGENTS
+↓
+PROOF
+↓
+CHAIN
+↓
+NETWORK
 ```
 
 ## Commands
@@ -36,6 +72,7 @@ pnpm lint
 pnpm typecheck
 pnpm test
 pnpm build
+pnpm world:dev
 ```
 
 PostgreSQL smoke:
@@ -48,8 +85,10 @@ pnpm db:seed
 pnpm db:rollback
 ```
 
-## Architectural invariant
+## Architectural invariants
 
 **CLAIM != PROOF**
 
-The domain layer is chain-agnostic. Blockchain-specific behavior must remain behind `ChainAdapter`.
+**WORLD VISUAL != PROTOCOL TRUTH**
+
+The domain remains chain-agnostic. Blockchain, DEX and bridge implementations stay behind adapter boundaries.
