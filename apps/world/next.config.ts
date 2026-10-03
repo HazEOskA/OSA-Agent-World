@@ -9,7 +9,6 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  transpilePackages: ["@osa/chain-solana"],
   poweredByHeader: false,
   async headers() {
     return [{ source:"/(.*)", headers:securityHeaders }];
