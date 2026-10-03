@@ -6,6 +6,7 @@ import { AgentDistrict } from "./AgentDistrict";
 import { BridgeTower } from "./BridgeTower";
 import { DeFiTerminal } from "./DeFiTerminal";
 import { IdentityGate } from "./IdentityGate";
+import { ProofLab } from "./ProofLab";
 import { ProtocolOverlay } from "./ProtocolOverlay";
 import { WorldScene } from "./WorldScene";
 import {
@@ -81,7 +82,8 @@ export function WorldShell() {
     "transaction.confirmed",
     "defi.swap.confirmed",
     "bridge.transfer.completed",
-    "agent.execution.completed"
+    "agent.execution.completed",
+    "proof.verified"
   ].includes(state.lastEvent.type);
 
   return (
@@ -104,6 +106,7 @@ export function WorldShell() {
       <AgentDistrict active={!identityOpen && state.activeDistrict === "agents"} onWorldEvent={ingestWorldEvent} />
       <DeFiTerminal active={!identityOpen && state.activeDistrict === "defi"} identity={identity} onWorldEvent={ingestWorldEvent} />
       <BridgeTower active={!identityOpen && state.activeDistrict === "bridge"} identity={identity} onWorldEvent={ingestWorldEvent} />
+      <ProofLab active={!identityOpen && state.activeDistrict === "proof"} onWorldEvent={ingestWorldEvent} />
     </main>
   );
 }

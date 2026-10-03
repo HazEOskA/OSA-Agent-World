@@ -11,51 +11,11 @@ export interface DistrictDefinition {
 }
 
 export const districts: readonly DistrictDefinition[] = [
-  {
-    id: "nexus",
-    code: "00",
-    title: "CENTRAL NEXUS",
-    eyebrow: "WORLD CORE",
-    description: "The spatial command layer connecting every protocol district.",
-    status: "CORE",
-    metric: "WORLD ONLINE"
-  },
-  {
-    id: "agents",
-    code: "01",
-    title: "AGENT DISTRICT",
-    eyebrow: "AUTONOMOUS ECONOMY",
-    description: "Identity, missions, wallets, policy and verifiable agent execution.",
-    status: "SIMULATED",
-    metric: "1 REFERENCE AGENT"
-  },
-  {
-    id: "defi",
-    code: "02",
-    title: "DEFI DISTRICT",
-    eyebrow: "LIQUIDITY ENGINE",
-    description: "Swap, liquidity, lending, staking and vault primitives enter here.",
-    status: "SIMULATED",
-    metric: "SIM + TESTNET"
-  },
-  {
-    id: "bridge",
-    code: "03",
-    title: "BRIDGE TOWER",
-    eyebrow: "CROSS-CHAIN PORTAL",
-    description: "A chain-agnostic teleport layer for assets, messages and agent identity.",
-    status: "SIMULATED",
-    metric: "WTT TESTNET READY"
-  },
-  {
-    id: "proof",
-    code: "04",
-    title: "PROOF LAB",
-    eyebrow: "CLAIM ≠ PROOF",
-    description: "Execution evidence, digests and verification become inspectable protocol objects.",
-    status: "SIMULATED",
-    metric: "APR BOUNDARY"
-  }
+  { id:"nexus",code:"00",title:"CENTRAL NEXUS",eyebrow:"WORLD CORE",description:"The spatial command layer connecting every protocol district.",status:"CORE",metric:"WORLD ONLINE" },
+  { id:"agents",code:"01",title:"AGENT DISTRICT",eyebrow:"AUTONOMOUS ECONOMY",description:"Identity, missions, wallets, policy and verifiable agent execution.",status:"CORE",metric:"KAI RUNTIME LIVE" },
+  { id:"defi",code:"02",title:"DEFI DISTRICT",eyebrow:"LIQUIDITY ENGINE",description:"Swap, liquidity, lending, staking and vault primitives enter here.",status:"SIMULATED",metric:"SIM + TESTNET" },
+  { id:"bridge",code:"03",title:"BRIDGE TOWER",eyebrow:"CROSS-CHAIN PORTAL",description:"A chain-agnostic teleport layer for assets, messages and agent identity.",status:"SIMULATED",metric:"WTT TESTNET READY" },
+  { id:"proof",code:"04",title:"PROOF LAB",eyebrow:"CLAIM ≠ PROOF",description:"Execution evidence, digests and verification become inspectable protocol objects.",status:"CORE",metric:"VERIFY + TAMPER" }
 ] as const;
 
 export type WorldEventType =
@@ -78,7 +38,13 @@ export type WorldEventType =
   | "bridge.transfer.completed"
   | "bridge.transfer.failed"
   | "agent.execution.started"
-  | "proof.verification.started";
+  | "agent.execution.completed"
+  | "agent.execution.failed"
+  | "proof.verification.started"
+  | "proof.verified"
+  | "proof.failed"
+  | "settlement.released"
+  | "reputation.updated";
 
 export interface WorldEvent {
   id: string;
@@ -95,27 +61,20 @@ export interface WorldState {
 }
 
 export const initialWorldEvent: WorldEvent = {
-  id: "w_evt_0001",
-  type: "world.booted",
-  district: "nexus",
-  label: "WORLD SHELL ONLINE",
-  mode: "REAL"
+  id:"w_evt_0001",type:"world.booted",district:"nexus",label:"WORLD SHELL ONLINE",mode:"REAL"
 };
 
 export function reduceWorldState(state: WorldState, event: WorldEvent): WorldState {
-  const isTeleport =
-    event.type === "district.teleport.started" ||
-    event.type === "district.teleport.completed";
-
+  const isTeleport=event.type==="district.teleport.started"||event.type==="district.teleport.completed";
   return {
-    activeDistrict: isTeleport ? event.district : state.activeDistrict,
-    teleporting: event.type === "district.teleport.started",
-    lastEvent: event
+    activeDistrict:isTeleport?event.district:state.activeDistrict,
+    teleporting:event.type==="district.teleport.started",
+    lastEvent:event
   };
 }
 
 export function districtById(id: DistrictId): DistrictDefinition {
-  const district = districts.find((candidate) => candidate.id === id);
-  if (!district) throw new Error(`Unknown district: ${id}`);
+  const district=districts.find(candidate=>candidate.id===id);
+  if(!district) throw new Error(`Unknown district: ${id}`);
   return district;
 }
