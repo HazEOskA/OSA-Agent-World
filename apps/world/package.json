@@ -1,6 +1,6 @@
 {
   "name": "@osa/world",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -20,6 +20,7 @@
     "@osa/evidence": "workspace:*",
     "@osa/execution-service": "workspace:*",
     "@osa/mission-service": "workspace:*",
+    "@osa/osa-devnet": "workspace:*",
     "@osa/proof-bridge": "workspace:*",
     "@osa/proof-verifier": "workspace:*",
     "@osa/reputation-service": "workspace:*",

@@ -4,6 +4,7 @@ import type { OsaIdentity } from "@osa/wallet-core";
 import { useCallback, useReducer, useState } from "react";
 import { AgentDistrict } from "./AgentDistrict";
 import { BridgeTower } from "./BridgeTower";
+import { ChainExplorer } from "./ChainExplorer";
 import { DeFiTerminal } from "./DeFiTerminal";
 import { IdentityGate } from "./IdentityGate";
 import { ProofLab } from "./ProofLab";
@@ -83,7 +84,8 @@ export function WorldShell() {
     "defi.swap.confirmed",
     "bridge.transfer.completed",
     "agent.execution.completed",
-    "proof.verified"
+    "proof.verified",
+    "chain.snapshot.loaded"
   ].includes(state.lastEvent.type);
 
   return (
@@ -107,6 +109,7 @@ export function WorldShell() {
       <DeFiTerminal active={!identityOpen && state.activeDistrict === "defi"} identity={identity} onWorldEvent={ingestWorldEvent} />
       <BridgeTower active={!identityOpen && state.activeDistrict === "bridge"} identity={identity} onWorldEvent={ingestWorldEvent} />
       <ProofLab active={!identityOpen && state.activeDistrict === "proof"} onWorldEvent={ingestWorldEvent} />
+      <ChainExplorer active={!identityOpen && state.activeDistrict === "chain"} onWorldEvent={ingestWorldEvent} />
     </main>
   );
 }

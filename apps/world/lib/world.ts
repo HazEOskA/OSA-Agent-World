@@ -1,4 +1,4 @@
-export type DistrictId = "nexus" | "agents" | "defi" | "bridge" | "proof";
+export type DistrictId = "nexus" | "agents" | "defi" | "bridge" | "proof" | "chain";
 
 export interface DistrictDefinition {
   id: DistrictId;
@@ -15,7 +15,8 @@ export const districts: readonly DistrictDefinition[] = [
   { id:"agents",code:"01",title:"AGENT DISTRICT",eyebrow:"AUTONOMOUS ECONOMY",description:"Identity, missions, wallets, policy and verifiable agent execution.",status:"CORE",metric:"KAI RUNTIME LIVE" },
   { id:"defi",code:"02",title:"DEFI DISTRICT",eyebrow:"LIQUIDITY ENGINE",description:"Swap, liquidity, lending, staking and vault primitives enter here.",status:"SIMULATED",metric:"SIM + TESTNET" },
   { id:"bridge",code:"03",title:"BRIDGE TOWER",eyebrow:"CROSS-CHAIN PORTAL",description:"A chain-agnostic teleport layer for assets, messages and agent identity.",status:"SIMULATED",metric:"WTT TESTNET READY" },
-  { id:"proof",code:"04",title:"PROOF LAB",eyebrow:"CLAIM ≠ PROOF",description:"Execution evidence, digests and verification become inspectable protocol objects.",status:"CORE",metric:"VERIFY + TAMPER" }
+  { id:"proof",code:"04",title:"PROOF LAB",eyebrow:"CLAIM ≠ PROOF",description:"Execution evidence, digests and verification become inspectable protocol objects.",status:"CORE",metric:"VERIFY + TAMPER" },
+  { id:"chain",code:"05",title:"CHAIN CORE",eyebrow:"L1 / L2 / L3 DEVNET",description:"Genesis, block production and settlement anchors across the OSA execution stack.",status:"SIMULATED",metric:"OSA DEVNET LIVE" }
 ] as const;
 
 export type WorldEventType =
@@ -44,7 +45,8 @@ export type WorldEventType =
   | "proof.verified"
   | "proof.failed"
   | "settlement.released"
-  | "reputation.updated";
+  | "reputation.updated"
+  | "chain.snapshot.loaded";
 
 export interface WorldEvent {
   id: string;
