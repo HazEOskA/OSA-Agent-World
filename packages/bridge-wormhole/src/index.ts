@@ -154,7 +154,7 @@ export async function quoteWormholeTestnetTransfer(
     transferAmount,
     from,
     to,
-    "TokenBridge"
+    false
   );
 
   const quote = await TokenTransfer.quoteTransfer(
@@ -166,6 +166,13 @@ export async function quoteWormholeTestnetTransfer(
 
   const destinationToken = Wormhole.canonicalAddress(quote.destinationToken.token);
   const sourceToken = Wormhole.canonicalAddress(quote.sourceToken.token);
+
+  const destinationDecimals = Number(
+    await wh.getDecimals(quote.destinationToken.token.chain, quote.destinationToken.token.address)
+  );
+  const destinationDisplay = amount.display(
+    amount.fromBaseUnits(quote.destinationToken.amount, destinationDecimals)
+  );
 
   return {
     route: {
@@ -180,7 +187,7 @@ export async function quoteWormholeTestnetTransfer(
       estimatedSeconds: 90,
       securityModel: "Wormhole Token Bridge / Guardian attestation"
     },
-    destinationAmount: amount.display(quote.destinationToken.amount),
+    destinationAmount: destinationDisplay,
     sourceToken,
     destinationToken
   };
