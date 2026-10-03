@@ -1,4 +1,4 @@
-import { createPublicClient, formatEther, http, sepolia, type Address, type Hash } from "viem";
+import { createPublicClient, formatEther, http, type Address, type Hash } from "viem";\nimport { sepolia } from "viem/chains";
 import type { WalletConnection } from "@osa/wallet-core";
 
 export const EVM_TESTNET = {
