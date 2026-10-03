@@ -7,6 +7,7 @@ import { BridgeTower } from "./BridgeTower";
 import { ChainExplorer } from "./ChainExplorer";
 import { DeFiTerminal } from "./DeFiTerminal";
 import { IdentityGate } from "./IdentityGate";
+import { NodeGrid } from "./NodeGrid";
 import { ProofLab } from "./ProofLab";
 import { ProtocolOverlay } from "./ProtocolOverlay";
 import { WorldScene } from "./WorldScene";
@@ -85,7 +86,8 @@ export function WorldShell() {
     "bridge.transfer.completed",
     "agent.execution.completed",
     "proof.verified",
-    "chain.snapshot.loaded"
+    "chain.snapshot.loaded",
+    "network.snapshot.loaded"
   ].includes(state.lastEvent.type);
 
   return (
@@ -110,6 +112,7 @@ export function WorldShell() {
       <BridgeTower active={!identityOpen && state.activeDistrict === "bridge"} identity={identity} onWorldEvent={ingestWorldEvent} />
       <ProofLab active={!identityOpen && state.activeDistrict === "proof"} onWorldEvent={ingestWorldEvent} />
       <ChainExplorer active={!identityOpen && state.activeDistrict === "chain"} onWorldEvent={ingestWorldEvent} />
+      <NodeGrid active={!identityOpen && state.activeDistrict === "nodes"} onWorldEvent={ingestWorldEvent} />
     </main>
   );
 }

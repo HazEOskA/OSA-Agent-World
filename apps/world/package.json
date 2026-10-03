@@ -1,6 +1,6 @@
 {
   "name": "@osa/world",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -19,11 +19,15 @@
     "@osa/domain": "workspace:*",
     "@osa/evidence": "workspace:*",
     "@osa/execution-service": "workspace:*",
+    "@osa/indexer": "workspace:*",
     "@osa/mission-service": "workspace:*",
+    "@osa/network-core": "workspace:*",
     "@osa/osa-devnet": "workspace:*",
     "@osa/proof-bridge": "workspace:*",
     "@osa/proof-verifier": "workspace:*",
+    "@osa/relayer": "workspace:*",
     "@osa/reputation-service": "workspace:*",
+    "@osa/rpc-service": "workspace:*",
     "@osa/settlement-service": "workspace:*",
     "@osa/wallet-core": "workspace:*",
     "@osa/wallet-policy": "workspace:*",
