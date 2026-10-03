@@ -14,7 +14,7 @@ describe("network core",()=>{
   it("requires two thirds plus one for finality",()=>{
     const block=buildReferenceDevnet().explorer().recentBlocks[0];
     if(!block) throw new Error("Missing block");
-    expect(simulateFinality(block,[true,true,false]).finalized).toBe(true);
-    expect(simulateFinality(block,[true,false,false]).finalized).toBe(false);
+    expect(simulateFinality(block,[true,true,true]).finalized).toBe(true);
+    expect(simulateFinality(block,[true,true,false]).finalized).toBe(false);
   });
 });
