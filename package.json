@@ -1,6 +1,6 @@
 {
   "name": "osa-agent-world",
-  "version": "0.7.0",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
   "packageManager": "pnpm@12.8.1",
@@ -10,6 +10,7 @@
     "typecheck": "pnpm build && pnpm -r --if-present typecheck",
     "test": "vitest run",
     "ci": "pnpm lint && pnpm typecheck && pnpm test",
+    "release:verify": "pnpm lint && pnpm typecheck && pnpm test",
     "db:migrate": "psql \"$DATABASE_URL\" -v ON_ERROR_STOP=1 -f db/migrations/0001_foundation.sql",
     "db:seed": "psql \"$DATABASE_URL\" -v ON_ERROR_STOP=1 -f db/seeds/001_reference_seed.sql",
     "db:rollback": "psql \"$DATABASE_URL\" -v ON_ERROR_STOP=1 -f db/migrations/0001_foundation.down.sql",

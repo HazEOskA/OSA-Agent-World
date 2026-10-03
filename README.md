@@ -1,58 +1,60 @@
 # OSA Crypto World
 
-**OSA Crypto World** is a living Web4 city where agents, chains, DeFi, bridges, nodes and verifiable execution become one spatial economy.
+A cyberpunk Web4 world where agents, DeFi, bridges, proofs, chain layers, nodes and service markets are represented as one verifiable economy.
 
-## Current alpha
+## V0.1 Goal
 
-### Foundation
-- chain-independent domain,
-- deterministic protocol events,
-- PostgreSQL + Drizzle,
-- adapters,
-- observability.
+**Tasks 01–60 implemented.**
 
-### World Shell
-- procedural Three.js city,
-- Central Nexus,
-- Agent / DeFi / Bridge / Proof districts,
-- teleport navigation,
-- desktop/mobile parity.
+Reference path:
 
-### Web3 Core
-- OSA Identity Gate,
-- Ethereum Sepolia,
-- Solana Devnet,
-- browser wallet signing,
-- real testnet transaction lifecycle.
+```text
+ENTER WORLD
+→ IDENTITY
+→ AGENT / KAI
+→ MISSION
+→ AUTHORITY
+→ EXECUTION
+→ EVIDENCE
+→ PROOF
+→ SETTLEMENT
+→ REPUTATION
+→ DEFI
+→ BRIDGE
+→ OSA L3
+→ OSA L2
+→ OSA L1
+→ NODE GRID
+→ MARKET
+```
 
-### DeFi
-- OSA AMM simulation,
-- Sepolia Uniswap V3 quote + swap path,
-- Liquidity Core,
-- LP position visualization.
+## Districts
 
-### Bridge — TASK 25–29
-- Bridge Tower,
-- reusable Bridge Trace state model,
-- full simulation trace,
-- Wormhole WTT testnet adapter,
-- Arbitrum Sepolia → Base Sepolia reference route,
-- source transaction,
-- VAA / attestation stage,
-- destination redeem,
-- complete cross-chain trace,
-- World pulse on bridge completion.
+- Central Nexus
+- Agent District
+- DeFi District
+- Bridge Tower
+- Proof Lab
+- Chain Core
+- Node Grid
+- Market Zone
+
+## Release proof
+
+`GET /api/release-proof` executes the reference integration loop and returns canonical IDs, truth labels and the security-gate result.
 
 ## Truth labels
 
 ```text
-REAL       application/world behavior
-TESTNET    live blockchain test networks
-SIMULATED  modeled behavior with no real asset movement
-FUTURE     reserved architecture only
+REAL       real application behavior
+TESTNET    real external-chain test networks
+SIMULATED  executable models with no production-value claims
+FUTURE     architecture not yet implemented
 ```
 
-## Commands
+Current OSA L1/L2/L3 and node network are executable **SIMULATED DEVNET** models. They are not presented as a permissionless public mainnet.
+
+## Development
 
 ```bash
 pnpm install
@@ -63,16 +65,20 @@ pnpm build
 pnpm world:dev
 ```
 
-## Invariants
+## Core invariants
 
 **CLAIM != PROOF**
 
-**WORLD VISUAL != PROTOCOL TRUTH**
+**AGENT != SIGNER**
 
-**NO RAW PRIVATE KEYS**
+**RUNTIME != SETTLEMENT AUTHORITY**
 
-**SIMULATION != LIQUIDITY**
+**PROOF != QUALITY JUDGMENT**
 
-**SOURCE TX != BRIDGE COMPLETE**
+**SIMULATION != MAINNET**
 
-Production bridge security, mainnet assets and OSA-native bridge infrastructure remain outside this slice.
+See:
+
+- `docs/architecture/MASTER_ROADMAP_V0.1.md`
+- `docs/RELEASE_PROOF_V0.1.md`
+- `docs/security/SECURITY_GATE_V0.1.md`

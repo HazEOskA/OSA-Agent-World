@@ -6,5 +6,10 @@
   "exports":{".":"./dist/index.js"},
   "types":"./dist/index.d.ts",
   "scripts":{"build":"tsc -p tsconfig.json","typecheck":"tsc -p tsconfig.json --noEmit"},
-  "dependencies":{"@osa/domain":"workspace:*","@osa/market-core":"workspace:*","@osa/wallet-policy":"workspace:*"}
+  "dependencies":{
+    "@osa/agent-core":"workspace:*",
+    "@osa/domain":"workspace:*",
+    "@osa/market-core":"workspace:*",
+    "@osa/wallet-policy":"workspace:*"
+  }
 }

@@ -10,6 +10,7 @@ import { IdentityGate } from "./IdentityGate";
 import { NodeGrid } from "./NodeGrid";
 import { MarketZone } from "./MarketZone";
 import { ProofLab } from "./ProofLab";
+import { ReleasePanel } from "./ReleasePanel";
 import { ProtocolOverlay } from "./ProtocolOverlay";
 import { WorldScene } from "./WorldScene";
 import {
@@ -89,7 +90,8 @@ export function WorldShell() {
     "proof.verified",
     "chain.snapshot.loaded",
     "network.snapshot.loaded",
-    "market.snapshot.loaded"
+    "market.snapshot.loaded",
+    "release.proof.loaded"
   ].includes(state.lastEvent.type);
 
   return (
@@ -116,6 +118,7 @@ export function WorldShell() {
       <ChainExplorer active={!identityOpen && state.activeDistrict === "chain"} onWorldEvent={ingestWorldEvent} />
       <NodeGrid active={!identityOpen && state.activeDistrict === "nodes"} onWorldEvent={ingestWorldEvent} />
       <MarketZone active={!identityOpen && state.activeDistrict === "market"} onWorldEvent={ingestWorldEvent} />
+      <ReleasePanel active={!identityOpen && state.activeDistrict === "nexus"} onWorldEvent={ingestWorldEvent} />
     </main>
   );
 }

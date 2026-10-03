@@ -37,6 +37,9 @@ export function ProtocolOverlay({
           <span className="rail-divider" />
           <span>WEB3 CORE</span>
           <b className="testnet">TESTNET</b>
+          <span className="rail-divider" />
+          <span>GOAL</span>
+          <b className="goal-complete">60/60</b>
           <button type="button" className="identity-open" onClick={onIdentity}>
             IDENTITY ↗
           </button>

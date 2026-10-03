@@ -50,7 +50,8 @@ export type WorldEventType =
   | "reputation.updated"
   | "chain.snapshot.loaded"
   | "network.snapshot.loaded"
-  | "market.snapshot.loaded";
+  | "market.snapshot.loaded"
+  | "release.proof.loaded";
 
 export interface WorldEvent {
   id: string;

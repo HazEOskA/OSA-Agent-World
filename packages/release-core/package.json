@@ -1,0 +1,27 @@
+{
+  "name":"@osa/release-core",
+  "version":"0.1.0",
+  "private":true,
+  "type":"module",
+  "exports":{".":"./dist/index.js"},
+  "types":"./dist/index.d.ts",
+  "scripts":{"build":"tsc -p tsconfig.json","typecheck":"tsc -p tsconfig.json --noEmit"},
+  "dependencies":{
+    "@osa/agent-core":"workspace:*",
+    "@osa/agent-payment-service":"workspace:*",
+    "@osa/bridge-core":"workspace:*",
+    "@osa/defi-core":"workspace:*",
+    "@osa/domain":"workspace:*",
+    "@osa/evidence":"workspace:*",
+    "@osa/execution-service":"workspace:*",
+    "@osa/market-core":"workspace:*",
+    "@osa/mission-service":"workspace:*",
+    "@osa/network-core":"workspace:*",
+    "@osa/osa-devnet":"workspace:*",
+    "@osa/proof-bridge":"workspace:*",
+    "@osa/proof-verifier":"workspace:*",
+    "@osa/reputation-service":"workspace:*",
+    "@osa/settlement-service":"workspace:*",
+    "@osa/wallet-policy":"workspace:*"
+  }
+}

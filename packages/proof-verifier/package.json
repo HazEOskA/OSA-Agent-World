@@ -7,8 +7,10 @@
   "types":"./dist/index.d.ts",
   "scripts":{"build":"tsc -p tsconfig.json","typecheck":"tsc -p tsconfig.json --noEmit"},
   "dependencies":{
+    "@osa/agent-core":"workspace:*",
     "@osa/domain":"workspace:*",
     "@osa/evidence":"workspace:*",
-    "@osa/proof-bridge":"workspace:*"
+    "@osa/proof-bridge":"workspace:*",
+    "@osa/wallet-policy":"workspace:*"
   }
 }

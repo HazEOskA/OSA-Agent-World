@@ -46,6 +46,7 @@ export function buildProofReceipt(input: BuildProofInput): ProofReceipt {
 }
 
 export function proofSigningPayload(proof: ProofReceipt) {
-  const { signature: _signature, ...unsigned } = proof;
+  const { signature, ...unsigned } = proof;
+  void signature;
   return unsigned;
 }
