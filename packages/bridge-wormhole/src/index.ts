@@ -217,7 +217,7 @@ export async function executeWormholeTestnetTransfer(
       transferAmount,
       from,
       to,
-      "TokenBridge"
+      false
     );
 
     const sourceSigner = await browserWormholeSigner("ArbitrumSepolia");
