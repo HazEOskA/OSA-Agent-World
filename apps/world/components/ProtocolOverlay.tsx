@@ -5,11 +5,13 @@ import { districtById, districts, type DistrictId, type WorldEvent } from "../li
 export function ProtocolOverlay({
   activeDistrict,
   event,
-  onTeleport
+  onTeleport,
+  onIdentity
 }: {
   activeDistrict: DistrictId;
   event: WorldEvent;
   onTeleport: (district: DistrictId) => void;
+  onIdentity: () => void;
 }) {
   const active = districtById(activeDistrict);
 
@@ -33,8 +35,11 @@ export function ProtocolOverlay({
           <span>WORLD SHELL</span>
           <b>REAL</b>
           <span className="rail-divider" />
-          <span>ECONOMY</span>
-          <b className="simulated">SIMULATED</b>
+          <span>WEB3 CORE</span>
+          <b className="testnet">TESTNET</b>
+          <button type="button" className="identity-open" onClick={onIdentity}>
+            IDENTITY ↗
+          </button>
         </div>
       </header>
 
@@ -54,7 +59,7 @@ export function ProtocolOverlay({
       <div className="event-telemetry" aria-live="polite">
         <div className="telemetry-kicker">WORLD EVENT</div>
         <strong>{event.label}</strong>
-        <span>{event.mode}</span>
+        <span className={event.mode.toLowerCase()}>{event.mode}</span>
       </div>
 
       <nav className="portal-nav" aria-label="Teleport to district">

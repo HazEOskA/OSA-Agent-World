@@ -1,6 +1,6 @@
 {
   "name": "@osa/world",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -9,7 +9,13 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@osa/chain-evm": "workspace:*",
+    "@osa/chain-solana": "workspace:*",
+    "@osa/wallet-core": "workspace:*",
     "@react-three/fiber": "9.8.1",
+    "@solana/kit": "8.3.0",
+    "@solana/kit-plugin-wallet": "0.20.0",
+    "@solana/react": "8.3.0",
     "next": "16.3.8",
     "react": "19.3.0",
     "react-dom": "19.3.0",

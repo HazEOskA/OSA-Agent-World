@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useReducer, useState } from "react";
+import { IdentityGate } from "./IdentityGate";
 import { ProtocolOverlay } from "./ProtocolOverlay";
 import { WorldScene } from "./WorldScene";
 import {
@@ -26,6 +27,7 @@ function nextEventId(): string {
 
 export function WorldShell() {
   const [entered, setEntered] = useState(false);
+  const [identityOpen, setIdentityOpen] = useState(true);
   const [state, dispatch] = useReducer(reduceWorldState, initialState);
 
   const teleport = useCallback((district: DistrictId) => {
@@ -50,6 +52,10 @@ export function WorldShell() {
     }, 620);
   }, []);
 
+  const ingestWorldEvent = useCallback((event: WorldEvent) => {
+    dispatch(event);
+  }, []);
+
   if (!entered) {
     return (
       <main className="entry-gate">
@@ -68,14 +74,21 @@ export function WorldShell() {
           </p>
 
           <div className="entry-actions">
-            <button type="button" className="enter-button" onClick={() => setEntered(true)}>
+            <button
+              type="button"
+              className="enter-button"
+              onClick={() => {
+                setEntered(true);
+                setIdentityOpen(true);
+              }}
+            >
               <span>ENTER WORLD</span>
               <i>↗</i>
             </button>
             <div className="entry-state">
               <span>ALPHA</span>
               <b>WORLD SHELL REAL</b>
-              <i>ECONOMY SIMULATED</i>
+              <i>WEB3 CORE TESTNET</i>
             </div>
           </div>
         </section>
@@ -85,16 +98,35 @@ export function WorldShell() {
     );
   }
 
+  const chainConfirmed = state.lastEvent.type === "transaction.confirmed";
+
   return (
-    <main className={state.teleporting ? "world-shell teleporting" : "world-shell"}>
+    <main
+      className={[
+        "world-shell",
+        state.teleporting ? "teleporting" : "",
+        chainConfirmed ? "chain-confirmed" : ""
+      ]
+        .filter(Boolean)
+        .join(" ")}
+    >
       <WorldScene activeDistrict={state.activeDistrict} onSelect={teleport} />
       <div className="world-vignette" aria-hidden="true" />
       <div className="world-scanlines" aria-hidden="true" />
       <div className="teleport-flash" aria-hidden="true" />
+      <div className="chain-pulse" aria-hidden="true" />
+
       <ProtocolOverlay
         activeDistrict={state.activeDistrict}
         event={state.lastEvent}
         onTeleport={teleport}
+        onIdentity={() => setIdentityOpen(true)}
+      />
+
+      <IdentityGate
+        open={identityOpen}
+        onClose={() => setIdentityOpen(false)}
+        onWorldEvent={ingestWorldEvent}
       />
     </main>
   );

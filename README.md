@@ -4,64 +4,43 @@
 
 ## Current alpha
 
-The repository now contains the foundation plus the first **World Shell** slice.
-
 ### Foundation
 
 - chain-independent domain model,
-- canonical IDs and state invariants,
-- deterministic protocol event envelope,
-- PostgreSQL + Drizzle schema,
-- migration / seed / rollback,
-- `ChainAdapter` + `InMemoryChainAdapter`,
-- contract tests.
+- deterministic protocol events,
+- PostgreSQL + Drizzle,
+- ChainAdapter + InMemoryChainAdapter,
+- observability / correlation IDs.
 
 ### World Shell
 
-- protocol adapter interfaces,
-- observability / trace context,
-- Next.js + React world client,
 - procedural Three.js / React Three Fiber city,
-- World Entry,
 - Central Nexus,
-- Agent District,
-- DeFi District,
-- Bridge Tower,
-- Proof Lab,
+- Agent / DeFi / Bridge / Proof districts,
 - teleport navigation,
-- protocol-driven world state,
 - desktop/mobile parity,
-- reduced-motion fallback.
+- no stock graphics.
+
+### Web3 Core — TASK 14–19
+
+- OSA Identity Gate,
+- Wallet Core state machine,
+- Ethereum Sepolia adapter via viem,
+- Solana Devnet adapter via current `@solana/kit`,
+- Wallet Standard discovery for Solana,
+- native test assets `ETH_TEST` and `SOL_TEST`,
+- explicit simulated `OSA_TEST`,
+- real browser-wallet testnet transaction path,
+- `AWAITING_SIGNATURE → SUBMITTED → CONFIRMED` lifecycle,
+- protocol event → visual World pulse.
 
 ## Truth labels
 
-The UI explicitly distinguishes:
-
 ```text
-REAL
-TESTNET
-SIMULATED
-FUTURE
-```
-
-The current 3D world shell is real application behavior. DeFi, bridge and agent economy activity are still simulated in this slice.
-
-## Core direction
-
-```text
-PROTOCOL
-↓
-WORLD
-↓
-ECONOMY
-↓
-AGENTS
-↓
-PROOF
-↓
-CHAIN
-↓
-NETWORK
+REAL       application/world behavior
+TESTNET    live blockchain test networks
+SIMULATED  modeled behavior with no real asset movement
+FUTURE     reserved architecture only
 ```
 
 ## Commands
@@ -75,20 +54,12 @@ pnpm build
 pnpm world:dev
 ```
 
-PostgreSQL smoke:
-
-```bash
-docker compose up -d postgres
-export DATABASE_URL=postgresql://postgres:postgres@localhost:5432/osa_agent_world
-pnpm db:migrate
-pnpm db:seed
-pnpm db:rollback
-```
-
-## Architectural invariants
+## Invariants
 
 **CLAIM != PROOF**
 
 **WORLD VISUAL != PROTOCOL TRUTH**
 
-The domain remains chain-agnostic. Blockchain, DEX and bridge implementations stay behind adapter boundaries.
+**NO RAW PRIVATE KEYS**
+
+The Web3 alpha is testnet-only. Production DeFi, bridge and OSA-native chain assets are not part of this slice.

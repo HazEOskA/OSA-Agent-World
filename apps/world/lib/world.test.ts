@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { initialWorldEvent, reduceWorldState, type WorldState } from "./world";
 
 describe("world state", () => {
-  it("moves the active district through protocol-style events", () => {
+  it("moves the active district through teleport events", () => {
     const state: WorldState = {
       activeDistrict: "nexus",
       teleporting: false,
@@ -19,5 +19,24 @@ describe("world state", () => {
 
     expect(next.activeDistrict).toBe("bridge");
     expect(next.teleporting).toBe(true);
+  });
+
+  it("reacts to chain events without moving the user", () => {
+    const state: WorldState = {
+      activeDistrict: "defi",
+      teleporting: false,
+      lastEvent: initialWorldEvent
+    };
+
+    const next = reduceWorldState(state, {
+      id: "w_evt_0003",
+      type: "transaction.confirmed",
+      district: "nexus",
+      label: "CHAIN CONFIRMED",
+      mode: "TESTNET"
+    });
+
+    expect(next.activeDistrict).toBe("defi");
+    expect(next.lastEvent.type).toBe("transaction.confirmed");
   });
 });

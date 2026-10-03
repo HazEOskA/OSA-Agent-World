@@ -62,6 +62,12 @@ export type WorldEventType =
   | "world.booted"
   | "district.teleport.started"
   | "district.teleport.completed"
+  | "identity.wallet.connected"
+  | "identity.wallet.disconnected"
+  | "transaction.signature.requested"
+  | "transaction.submitted"
+  | "transaction.confirmed"
+  | "transaction.failed"
   | "bridge.transfer.started"
   | "agent.execution.started"
   | "proof.verification.started";
@@ -71,7 +77,7 @@ export interface WorldEvent {
   type: WorldEventType;
   district: DistrictId;
   label: string;
-  mode: "REAL" | "SIMULATED";
+  mode: "REAL" | "TESTNET" | "SIMULATED";
 }
 
 export interface WorldState {
@@ -89,8 +95,12 @@ export const initialWorldEvent: WorldEvent = {
 };
 
 export function reduceWorldState(state: WorldState, event: WorldEvent): WorldState {
+  const isTeleport =
+    event.type === "district.teleport.started" ||
+    event.type === "district.teleport.completed";
+
   return {
-    activeDistrict: event.district,
+    activeDistrict: isTeleport ? event.district : state.activeDistrict,
     teleporting: event.type === "district.teleport.started",
     lastEvent: event
   };
