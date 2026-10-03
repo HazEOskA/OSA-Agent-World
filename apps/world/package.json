@@ -1,6 +1,6 @@
 {
   "name": "@osa/world",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@osa/agent-core": "workspace:*",
+    "@osa/agent-payment-service": "workspace:*",
     "@osa/bridge-core": "workspace:*",
     "@osa/bridge-wormhole": "workspace:*",
     "@osa/chain-evm": "workspace:*",
@@ -20,6 +21,7 @@
     "@osa/evidence": "workspace:*",
     "@osa/execution-service": "workspace:*",
     "@osa/indexer": "workspace:*",
+    "@osa/market-core": "workspace:*",
     "@osa/mission-service": "workspace:*",
     "@osa/network-core": "workspace:*",
     "@osa/osa-devnet": "workspace:*",

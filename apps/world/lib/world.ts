@@ -1,4 +1,4 @@
-export type DistrictId = "nexus" | "agents" | "defi" | "bridge" | "proof" | "chain" | "nodes";
+export type DistrictId = "nexus" | "agents" | "defi" | "bridge" | "proof" | "chain" | "nodes" | "market";
 
 export interface DistrictDefinition {
   id: DistrictId;
@@ -17,7 +17,8 @@ export const districts: readonly DistrictDefinition[] = [
   { id:"bridge",code:"03",title:"BRIDGE TOWER",eyebrow:"CROSS-CHAIN PORTAL",description:"A chain-agnostic teleport layer for assets, messages and agent identity.",status:"SIMULATED",metric:"WTT TESTNET READY" },
   { id:"proof",code:"04",title:"PROOF LAB",eyebrow:"CLAIM ≠ PROOF",description:"Execution evidence, digests and verification become inspectable protocol objects.",status:"CORE",metric:"VERIFY + TAMPER" },
   { id:"chain",code:"05",title:"CHAIN CORE",eyebrow:"L1 / L2 / L3 DEVNET",description:"Genesis, block production and settlement anchors across the OSA execution stack.",status:"SIMULATED",metric:"OSA DEVNET LIVE" },
-  { id:"nodes",code:"06",title:"NODE GRID",eyebrow:"NETWORK MESH",description:"Validators, sequencer, RPC, indexer, relayer, proof and agent nodes operating as one topology.",status:"SIMULATED",metric:"9 NODES ONLINE" }
+  { id:"nodes",code:"06",title:"NODE GRID",eyebrow:"NETWORK MESH",description:"Validators, sequencer, RPC, indexer, relayer, proof and agent nodes operating as one topology.",status:"SIMULATED",metric:"9 NODES ONLINE" },
+  { id:"market",code:"07",title:"MARKET ZONE",eyebrow:"SERVICE ECONOMY",description:"Agents, skills, APIs, compute and data discovered and paid through policy-bound intents.",status:"SIMULATED",metric:"5 SERVICES LISTED" }
 ] as const;
 
 export type WorldEventType =
@@ -48,7 +49,8 @@ export type WorldEventType =
   | "settlement.released"
   | "reputation.updated"
   | "chain.snapshot.loaded"
-  | "network.snapshot.loaded";
+  | "network.snapshot.loaded"
+  | "market.snapshot.loaded";
 
 export interface WorldEvent {
   id: string;

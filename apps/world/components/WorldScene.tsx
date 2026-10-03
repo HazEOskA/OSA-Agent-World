@@ -20,7 +20,8 @@ const visuals: readonly DistrictVisual[] = [
   { id:"bridge",position:[0.2,0.3,-7.2],height:5.6,radius:1.1,color:"#ff43d1" },
   { id:"proof",position:[-4.5,0.1,-7.5],height:3.8,radius:0.78,color:"#ffdb66" },
   { id:"chain",position:[4.7,0.1,-7.6],height:4.4,radius:0.88,color:"#4f8cff" },
-  { id:"nodes",position:[0,-0.1,-11.2],height:3.4,radius:0.96,color:"#20d9ff" }
+  { id:"nodes",position:[0,-0.1,-11.2],height:3.4,radius:0.96,color:"#20d9ff" },
+  { id:"market",position:[-7.1,-0.2,-4.8],height:2.9,radius:0.84,color:"#ff8a3d" }
 ] as const;
 
 const cameraTargets: Record<DistrictId, THREE.Vector3> = {
@@ -30,7 +31,8 @@ const cameraTargets: Record<DistrictId, THREE.Vector3> = {
   bridge:new THREE.Vector3(0.2,3.7,1.3),
   proof:new THREE.Vector3(-4.2,3.1,0.6),
   chain:new THREE.Vector3(4.5,3.2,0.5),
-  nodes:new THREE.Vector3(0,3.0,-2.4)
+  nodes:new THREE.Vector3(0,3.0,-2.4),
+  market:new THREE.Vector3(-6.8,2.8,2.0)
 };
 
 const lookTargets: Record<DistrictId, THREE.Vector3> = {
@@ -40,7 +42,8 @@ const lookTargets: Record<DistrictId, THREE.Vector3> = {
   bridge:new THREE.Vector3(0.2,0.5,-4.2),
   proof:new THREE.Vector3(-3.6,0.5,-5.3),
   chain:new THREE.Vector3(3.7,0.5,-5.4),
-  nodes:new THREE.Vector3(0,0.5,-10.2)
+  nodes:new THREE.Vector3(0,0.5,-10.2),
+  market:new THREE.Vector3(-6.0,0.5,-4.7)
 };
 
 function TeleportCamera({activeDistrict}:{activeDistrict:DistrictId}) {

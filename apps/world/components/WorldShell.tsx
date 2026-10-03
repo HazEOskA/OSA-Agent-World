@@ -8,6 +8,7 @@ import { ChainExplorer } from "./ChainExplorer";
 import { DeFiTerminal } from "./DeFiTerminal";
 import { IdentityGate } from "./IdentityGate";
 import { NodeGrid } from "./NodeGrid";
+import { MarketZone } from "./MarketZone";
 import { ProofLab } from "./ProofLab";
 import { ProtocolOverlay } from "./ProtocolOverlay";
 import { WorldScene } from "./WorldScene";
@@ -87,7 +88,8 @@ export function WorldShell() {
     "agent.execution.completed",
     "proof.verified",
     "chain.snapshot.loaded",
-    "network.snapshot.loaded"
+    "network.snapshot.loaded",
+    "market.snapshot.loaded"
   ].includes(state.lastEvent.type);
 
   return (
@@ -113,6 +115,7 @@ export function WorldShell() {
       <ProofLab active={!identityOpen && state.activeDistrict === "proof"} onWorldEvent={ingestWorldEvent} />
       <ChainExplorer active={!identityOpen && state.activeDistrict === "chain"} onWorldEvent={ingestWorldEvent} />
       <NodeGrid active={!identityOpen && state.activeDistrict === "nodes"} onWorldEvent={ingestWorldEvent} />
+      <MarketZone active={!identityOpen && state.activeDistrict === "market"} onWorldEvent={ingestWorldEvent} />
     </main>
   );
 }
