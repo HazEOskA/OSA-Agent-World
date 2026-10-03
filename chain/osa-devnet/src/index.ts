@@ -139,19 +139,22 @@ export class OsaDevnet implements OsaChainRuntime {
   }
 
   explorer(): OsaExplorerSnapshot {
-    const layers = {} as OsaExplorerSnapshot["layers"];
     const allBlocks: OsaBlock[] = [];
-
-    for (const layer of this.genesis.layers) {
+    const layerEntries = this.genesis.layers.map((layer) => {
       const state = this.#state(layer.layer);
-      layers[layer.layer] = {
-        chainId: layer.chainId,
-        height: state.height,
-        latestBlockHash: state.lastHash,
-        txCount: state.txCount
-      };
       allBlocks.push(...state.blocks);
-    }
+      return [
+        layer.layer,
+        {
+          chainId: layer.chainId,
+          height: state.height,
+          latestBlockHash: state.lastHash,
+          txCount: state.txCount
+        }
+      ] as const;
+    });
+
+    const layers = Object.fromEntries(layerEntries) as OsaExplorerSnapshot["layers"];
 
     return {
       network: "OSA_DEVNET",
