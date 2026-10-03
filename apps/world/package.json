@@ -1,6 +1,6 @@
 {
   "name": "@osa/world",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -11,6 +11,8 @@
   "dependencies": {
     "@osa/chain-evm": "workspace:*",
     "@osa/chain-solana": "workspace:*",
+    "@osa/defi-core": "workspace:*",
+    "@osa/defi-uniswap": "workspace:*",
     "@osa/wallet-core": "workspace:*",
     "@react-three/fiber": "9.8.1",
     "@solana/kit": "8.3.0",

@@ -36,7 +36,7 @@ export const districts: readonly DistrictDefinition[] = [
     eyebrow: "LIQUIDITY ENGINE",
     description: "Swap, liquidity, lending, staking and vault primitives enter here.",
     status: "SIMULATED",
-    metric: "TEST ECONOMY"
+    metric: "SIM + TESTNET"
   },
   {
     id: "bridge",
@@ -68,6 +68,11 @@ export type WorldEventType =
   | "transaction.submitted"
   | "transaction.confirmed"
   | "transaction.failed"
+  | "defi.quote.created"
+  | "defi.swap.submitted"
+  | "defi.swap.confirmed"
+  | "defi.swap.failed"
+  | "defi.liquidity.position.created"
   | "bridge.transfer.started"
   | "agent.execution.started"
   | "proof.verification.started";

@@ -35,6 +35,7 @@ interface IdentityGateProps {
   open: boolean;
   onClose: () => void;
   onWorldEvent: (event: WorldEvent) => void;
+  onIdentityChange: (identity: OsaIdentity | null) => void;
 }
 
 function errorMessage(error: unknown): string {
@@ -56,7 +57,12 @@ function buildWorldEvent(
   };
 }
 
-export function IdentityGate({ open, onClose, onWorldEvent }: IdentityGateProps) {
+export function IdentityGate({
+  open,
+  onClose,
+  onWorldEvent,
+  onIdentityChange
+}: IdentityGateProps) {
   const client = useSolanaClient();
   const wallets = useWallets(client);
   const connectedSolana = useConnectedWallet(client);
@@ -74,10 +80,11 @@ export function IdentityGate({ open, onClose, onWorldEvent }: IdentityGateProps)
     (wallet: WalletConnection) => {
       const next = createOsaIdentity(wallet);
       setIdentity(next);
+      onIdentityChange(next);
       setUiError(null);
       onWorldEvent(buildWorldEvent("identity.wallet.connected", `${wallet.kind} WALLET CONNECTED`));
     },
-    [onWorldEvent]
+    [onIdentityChange, onWorldEvent]
   );
 
   useEffect(() => {
@@ -122,6 +129,7 @@ export function IdentityGate({ open, onClose, onWorldEvent }: IdentityGateProps)
       boundSolanaAddress.current = null;
     }
     setIdentity(null);
+    onIdentityChange(null);
     txDispatch({ type: "RESET" });
     onWorldEvent(buildWorldEvent("identity.wallet.disconnected", "IDENTITY SESSION CLEARED"));
   };
@@ -135,7 +143,7 @@ export function IdentityGate({ open, onClose, onWorldEvent }: IdentityGateProps)
       onWorldEvent(buildWorldEvent("transaction.submitted", "TESTNET TRANSACTION SUBMITTED"));
     }
     if (event.type === "CONFIRMED") {
-      onWorldEvent(buildWorldEvent("transaction.confirmed", "CHAIN CONFIRMED", "nexus"));
+      onWorldEvent(buildWorldEvent("transaction.confirmed", "CHAIN CONFIRMED"));
     }
     if (event.type === "FAILED" || event.type === "BLOCKED") {
       onWorldEvent(buildWorldEvent("transaction.failed", event.message));

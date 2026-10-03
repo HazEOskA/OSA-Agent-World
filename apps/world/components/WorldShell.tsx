@@ -1,6 +1,8 @@
 "use client";
 
+import type { OsaIdentity } from "@osa/wallet-core";
 import { useCallback, useReducer, useState } from "react";
+import { DeFiTerminal } from "./DeFiTerminal";
 import { IdentityGate } from "./IdentityGate";
 import { ProtocolOverlay } from "./ProtocolOverlay";
 import { WorldScene } from "./WorldScene";
@@ -28,6 +30,7 @@ function nextEventId(): string {
 export function WorldShell() {
   const [entered, setEntered] = useState(false);
   const [identityOpen, setIdentityOpen] = useState(true);
+  const [identity, setIdentity] = useState<OsaIdentity | null>(null);
   const [state, dispatch] = useReducer(reduceWorldState, initialState);
 
   const teleport = useCallback((district: DistrictId) => {
@@ -88,7 +91,7 @@ export function WorldShell() {
             <div className="entry-state">
               <span>ALPHA</span>
               <b>WORLD SHELL REAL</b>
-              <i>WEB3 CORE TESTNET</i>
+              <i>WEB3 + DEFI TESTNET</i>
             </div>
           </div>
         </section>
@@ -98,14 +101,16 @@ export function WorldShell() {
     );
   }
 
-  const chainConfirmed = state.lastEvent.type === "transaction.confirmed";
+  const protocolPulse =
+    state.lastEvent.type === "transaction.confirmed" ||
+    state.lastEvent.type === "defi.swap.confirmed";
 
   return (
     <main
       className={[
         "world-shell",
         state.teleporting ? "teleporting" : "",
-        chainConfirmed ? "chain-confirmed" : ""
+        protocolPulse ? "chain-confirmed" : ""
       ]
         .filter(Boolean)
         .join(" ")}
@@ -126,6 +131,13 @@ export function WorldShell() {
       <IdentityGate
         open={identityOpen}
         onClose={() => setIdentityOpen(false)}
+        onWorldEvent={ingestWorldEvent}
+        onIdentityChange={setIdentity}
+      />
+
+      <DeFiTerminal
+        active={!identityOpen && state.activeDistrict === "defi"}
+        identity={identity}
         onWorldEvent={ingestWorldEvent}
       />
     </main>

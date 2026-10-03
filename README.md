@@ -5,34 +5,38 @@
 ## Current alpha
 
 ### Foundation
-
-- chain-independent domain model,
+- chain-independent domain,
 - deterministic protocol events,
 - PostgreSQL + Drizzle,
-- ChainAdapter + InMemoryChainAdapter,
-- observability / correlation IDs.
+- ChainAdapter,
+- observability.
 
 ### World Shell
-
-- procedural Three.js / React Three Fiber city,
+- procedural Three.js city,
 - Central Nexus,
 - Agent / DeFi / Bridge / Proof districts,
 - teleport navigation,
 - desktop/mobile parity,
 - no stock graphics.
 
-### Web3 Core — TASK 14–19
-
+### Web3 Core
 - OSA Identity Gate,
-- Wallet Core state machine,
-- Ethereum Sepolia adapter via viem,
-- Solana Devnet adapter via current `@solana/kit`,
-- Wallet Standard discovery for Solana,
-- native test assets `ETH_TEST` and `SOL_TEST`,
-- explicit simulated `OSA_TEST`,
-- real browser-wallet testnet transaction path,
-- `AWAITING_SIGNATURE → SUBMITTED → CONFIRMED` lifecycle,
-- protocol event → visual World pulse.
+- Ethereum Sepolia,
+- Solana Devnet,
+- browser wallets only,
+- real testnet transaction lifecycle,
+- world protocol pulse.
+
+### DeFi — TASK 20–24
+- DeFi District terminal,
+- `OSA_TEST / USDC_TEST` constant-product simulation,
+- live Ethereum Sepolia → Uniswap V3 quote,
+- real testnet ETH → USDC swap execution path,
+- dynamic pool discovery through Uniswap V3 Factory,
+- slippage/min-receive protection,
+- simulated Liquidity Core,
+- visual LP position object,
+- DeFi events driving World state.
 
 ## Truth labels
 
@@ -62,4 +66,6 @@ pnpm world:dev
 
 **NO RAW PRIVATE KEYS**
 
-The Web3 alpha is testnet-only. Production DeFi, bridge and OSA-native chain assets are not part of this slice.
+**SIMULATION != LIQUIDITY**
+
+Production bridge, lending, staking, OSA token and OSA-native chain are outside this slice.
