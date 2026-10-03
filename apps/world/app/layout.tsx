@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
+import { Analytics } from "@vercel/analytics/next";
 import { SolanaProvider } from "../lib/solana-provider";
 import "./globals.css";
 
@@ -20,6 +21,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
     <html lang="en">
       <body>
         <SolanaProvider>{children}</SolanaProvider>
+        <Analytics />
       </body>
     </html>
   );
