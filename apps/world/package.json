@@ -1,6 +1,6 @@
 {
   "name": "@osa/world",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -9,6 +9,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@osa/bridge-core": "workspace:*",
+    "@osa/bridge-wormhole": "workspace:*",
     "@osa/chain-evm": "workspace:*",
     "@osa/chain-solana": "workspace:*",
     "@osa/defi-core": "workspace:*",

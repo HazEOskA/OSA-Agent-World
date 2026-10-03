@@ -45,7 +45,7 @@ export const districts: readonly DistrictDefinition[] = [
     eyebrow: "CROSS-CHAIN PORTAL",
     description: "A chain-agnostic teleport layer for assets, messages and agent identity.",
     status: "SIMULATED",
-    metric: "ROUTE MODEL READY"
+    metric: "WTT TESTNET READY"
   },
   {
     id: "proof",
@@ -73,7 +73,10 @@ export type WorldEventType =
   | "defi.swap.confirmed"
   | "defi.swap.failed"
   | "defi.liquidity.position.created"
+  | "bridge.route.created"
   | "bridge.transfer.started"
+  | "bridge.transfer.completed"
+  | "bridge.transfer.failed"
   | "agent.execution.started"
   | "proof.verification.started";
 

@@ -1,6 +1,6 @@
 # OSA Crypto World
 
-**OSA Crypto World** is a living Web4 city where agents, chains, DeFi, nodes and verifiable execution become one spatial economy.
+**OSA Crypto World** is a living Web4 city where agents, chains, DeFi, bridges, nodes and verifiable execution become one spatial economy.
 
 ## Current alpha
 
@@ -8,7 +8,7 @@
 - chain-independent domain,
 - deterministic protocol events,
 - PostgreSQL + Drizzle,
-- ChainAdapter,
+- adapters,
 - observability.
 
 ### World Shell
@@ -16,27 +16,32 @@
 - Central Nexus,
 - Agent / DeFi / Bridge / Proof districts,
 - teleport navigation,
-- desktop/mobile parity,
-- no stock graphics.
+- desktop/mobile parity.
 
 ### Web3 Core
 - OSA Identity Gate,
 - Ethereum Sepolia,
 - Solana Devnet,
-- browser wallets only,
-- real testnet transaction lifecycle,
-- world protocol pulse.
+- browser wallet signing,
+- real testnet transaction lifecycle.
 
-### DeFi — TASK 20–24
-- DeFi District terminal,
-- `OSA_TEST / USDC_TEST` constant-product simulation,
-- live Ethereum Sepolia → Uniswap V3 quote,
-- real testnet ETH → USDC swap execution path,
-- dynamic pool discovery through Uniswap V3 Factory,
-- slippage/min-receive protection,
-- simulated Liquidity Core,
-- visual LP position object,
-- DeFi events driving World state.
+### DeFi
+- OSA AMM simulation,
+- Sepolia Uniswap V3 quote + swap path,
+- Liquidity Core,
+- LP position visualization.
+
+### Bridge — TASK 25–29
+- Bridge Tower,
+- reusable Bridge Trace state model,
+- full simulation trace,
+- Wormhole WTT testnet adapter,
+- Arbitrum Sepolia → Base Sepolia reference route,
+- source transaction,
+- VAA / attestation stage,
+- destination redeem,
+- complete cross-chain trace,
+- World pulse on bridge completion.
 
 ## Truth labels
 
@@ -68,4 +73,6 @@ pnpm world:dev
 
 **SIMULATION != LIQUIDITY**
 
-Production bridge, lending, staking, OSA token and OSA-native chain are outside this slice.
+**SOURCE TX != BRIDGE COMPLETE**
+
+Production bridge security, mainnet assets and OSA-native bridge infrastructure remain outside this slice.

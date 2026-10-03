@@ -2,6 +2,7 @@
 
 import type { OsaIdentity } from "@osa/wallet-core";
 import { useCallback, useReducer, useState } from "react";
+import { BridgeTower } from "./BridgeTower";
 import { DeFiTerminal } from "./DeFiTerminal";
 import { IdentityGate } from "./IdentityGate";
 import { ProtocolOverlay } from "./ProtocolOverlay";
@@ -91,7 +92,7 @@ export function WorldShell() {
             <div className="entry-state">
               <span>ALPHA</span>
               <b>WORLD SHELL REAL</b>
-              <i>WEB3 + DEFI TESTNET</i>
+              <i>WEB3 + DEFI + BRIDGE TESTNET</i>
             </div>
           </div>
         </section>
@@ -103,7 +104,8 @@ export function WorldShell() {
 
   const protocolPulse =
     state.lastEvent.type === "transaction.confirmed" ||
-    state.lastEvent.type === "defi.swap.confirmed";
+    state.lastEvent.type === "defi.swap.confirmed" ||
+    state.lastEvent.type === "bridge.transfer.completed";
 
   return (
     <main
@@ -137,6 +139,12 @@ export function WorldShell() {
 
       <DeFiTerminal
         active={!identityOpen && state.activeDistrict === "defi"}
+        identity={identity}
+        onWorldEvent={ingestWorldEvent}
+      />
+
+      <BridgeTower
+        active={!identityOpen && state.activeDistrict === "bridge"}
         identity={identity}
         onWorldEvent={ingestWorldEvent}
       />
