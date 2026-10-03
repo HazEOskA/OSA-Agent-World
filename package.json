@@ -1,12 +1,12 @@
 {
   "name": "osa-agent-world",
-  "version": "0.2.0",
+  "version": "0.6.0",
   "private": true,
   "type": "module",
   "packageManager": "pnpm@12.8.1",
   "scripts": {
     "build": "pnpm -r --if-present build",
-    "lint": "eslint \"packages/**/*.ts\" \"db/**/*.ts\" \"apps/**/*.ts\" \"apps/**/*.tsx\"",
+    "lint": "eslint \"packages/**/*.ts\" \"services/**/*.ts\" \"chain/**/*.ts\" \"tests/**/*.ts\" \"db/**/*.ts\" \"apps/**/*.ts\" \"apps/**/*.tsx\"",
     "typecheck": "pnpm build && pnpm -r --if-present typecheck",
     "test": "vitest run",
     "ci": "pnpm lint && pnpm typecheck && pnpm test",

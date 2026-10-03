@@ -1,6 +1,6 @@
 {
   "name": "@osa/world",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -9,13 +9,17 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@osa/agent-core": "workspace:*",
     "@osa/bridge-core": "workspace:*",
     "@osa/bridge-wormhole": "workspace:*",
     "@osa/chain-evm": "workspace:*",
     "@osa/chain-solana": "workspace:*",
     "@osa/defi-core": "workspace:*",
     "@osa/defi-uniswap": "workspace:*",
+    "@osa/execution-service": "workspace:*",
+    "@osa/mission-service": "workspace:*",
     "@osa/wallet-core": "workspace:*",
+    "@osa/wallet-policy": "workspace:*",
     "@react-three/fiber": "9.8.1",
     "@solana/kit": "8.3.0",
     "@solana/kit-plugin-wallet": "0.20.0",

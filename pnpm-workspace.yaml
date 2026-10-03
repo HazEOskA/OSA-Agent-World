@@ -1,6 +1,8 @@
 packages:
   - "apps/*"
   - "packages/*"
+  - "services/*"
+  - "chain/*"
   - "db"
 
 allowBuilds:

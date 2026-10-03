@@ -2,6 +2,7 @@
 
 import type { OsaIdentity } from "@osa/wallet-core";
 import { useCallback, useReducer, useState } from "react";
+import { AgentDistrict } from "./AgentDistrict";
 import { BridgeTower } from "./BridgeTower";
 import { DeFiTerminal } from "./DeFiTerminal";
 import { IdentityGate } from "./IdentityGate";
@@ -22,7 +23,6 @@ const initialState: WorldState = {
 };
 
 let eventCounter = 10;
-
 function nextEventId(): string {
   eventCounter += 1;
   return `w_evt_${eventCounter.toString().padStart(4, "0")}`;
@@ -35,16 +35,13 @@ export function WorldShell() {
   const [state, dispatch] = useReducer(reduceWorldState, initialState);
 
   const teleport = useCallback((district: DistrictId) => {
-    const start: WorldEvent = {
+    dispatch({
       id: nextEventId(),
       type: "district.teleport.started",
       district,
       label: `TELEPORT / ${district.toUpperCase()}`,
       mode: "REAL"
-    };
-
-    dispatch(start);
-
+    });
     window.setTimeout(() => {
       dispatch({
         id: nextEventId(),
@@ -56,9 +53,7 @@ export function WorldShell() {
     }, 620);
   }, []);
 
-  const ingestWorldEvent = useCallback((event: WorldEvent) => {
-    dispatch(event);
-  }, []);
+  const ingestWorldEvent = useCallback((event: WorldEvent) => dispatch(event), []);
 
   if (!entered) {
     return (
@@ -66,69 +61,38 @@ export function WorldShell() {
         <div className="entry-grid" aria-hidden="true" />
         <div className="entry-orbit orbit-one" aria-hidden="true" />
         <div className="entry-orbit orbit-two" aria-hidden="true" />
-
         <section className="entry-copy">
           <div className="entry-kicker">OSA PROTOCOL // WORLD BOOT SEQUENCE</div>
-          <h1>
-            ENTER THE
-            <span>AGENTIC CRYPTO WORLD</span>
-          </h1>
-          <p>
-            A living Web4 city where agents, chains, DeFi, nodes and verifiable execution become one spatial economy.
-          </p>
-
+          <h1>ENTER THE<span>AGENTIC CRYPTO WORLD</span></h1>
+          <p>A living Web4 city where agents, chains, DeFi, nodes and verifiable execution become one spatial economy.</p>
           <div className="entry-actions">
-            <button
-              type="button"
-              className="enter-button"
-              onClick={() => {
-                setEntered(true);
-                setIdentityOpen(true);
-              }}
-            >
-              <span>ENTER WORLD</span>
-              <i>↗</i>
+            <button type="button" className="enter-button" onClick={() => { setEntered(true); setIdentityOpen(true); }}>
+              <span>ENTER WORLD</span><i>↗</i>
             </button>
-            <div className="entry-state">
-              <span>ALPHA</span>
-              <b>WORLD SHELL REAL</b>
-              <i>WEB3 + DEFI + BRIDGE TESTNET</i>
-            </div>
+            <div className="entry-state"><span>ALPHA</span><b>WORLD SHELL REAL</b><i>WEB3 + AGENTS + DEFI + BRIDGE</i></div>
           </div>
         </section>
-
         <div className="entry-coordinate">51° // OSA NETWORK // WEB3 → WEB4</div>
       </main>
     );
   }
 
-  const protocolPulse =
-    state.lastEvent.type === "transaction.confirmed" ||
-    state.lastEvent.type === "defi.swap.confirmed" ||
-    state.lastEvent.type === "bridge.transfer.completed";
+  const protocolPulse = [
+    "transaction.confirmed",
+    "defi.swap.confirmed",
+    "bridge.transfer.completed",
+    "agent.execution.completed"
+  ].includes(state.lastEvent.type);
 
   return (
-    <main
-      className={[
-        "world-shell",
-        state.teleporting ? "teleporting" : "",
-        protocolPulse ? "chain-confirmed" : ""
-      ]
-        .filter(Boolean)
-        .join(" ")}
-    >
+    <main className={["world-shell", state.teleporting ? "teleporting" : "", protocolPulse ? "chain-confirmed" : ""].filter(Boolean).join(" ")}>
       <WorldScene activeDistrict={state.activeDistrict} onSelect={teleport} />
       <div className="world-vignette" aria-hidden="true" />
       <div className="world-scanlines" aria-hidden="true" />
       <div className="teleport-flash" aria-hidden="true" />
       <div className="chain-pulse" aria-hidden="true" />
 
-      <ProtocolOverlay
-        activeDistrict={state.activeDistrict}
-        event={state.lastEvent}
-        onTeleport={teleport}
-        onIdentity={() => setIdentityOpen(true)}
-      />
+      <ProtocolOverlay activeDistrict={state.activeDistrict} event={state.lastEvent} onTeleport={teleport} onIdentity={() => setIdentityOpen(true)} />
 
       <IdentityGate
         open={identityOpen}
@@ -137,17 +101,9 @@ export function WorldShell() {
         onIdentityChange={setIdentity}
       />
 
-      <DeFiTerminal
-        active={!identityOpen && state.activeDistrict === "defi"}
-        identity={identity}
-        onWorldEvent={ingestWorldEvent}
-      />
-
-      <BridgeTower
-        active={!identityOpen && state.activeDistrict === "bridge"}
-        identity={identity}
-        onWorldEvent={ingestWorldEvent}
-      />
+      <AgentDistrict active={!identityOpen && state.activeDistrict === "agents"} onWorldEvent={ingestWorldEvent} />
+      <DeFiTerminal active={!identityOpen && state.activeDistrict === "defi"} identity={identity} onWorldEvent={ingestWorldEvent} />
+      <BridgeTower active={!identityOpen && state.activeDistrict === "bridge"} identity={identity} onWorldEvent={ingestWorldEvent} />
     </main>
   );
 }
