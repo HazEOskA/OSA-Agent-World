@@ -9,6 +9,7 @@
     "lint": "eslint --no-error-on-unmatched-pattern \"packages/**/*.ts\" \"services/**/*.ts\" \"chain/**/*.ts\" \"tests/**/*.ts\" \"db/**/*.ts\" \"apps/**/*.ts\" \"apps/**/*.tsx\"",
     "typecheck": "pnpm build && pnpm -r --if-present typecheck",
     "test": "vitest run",
+    "dev": "pnpm --filter @osa/world dev",
     "ci": "pnpm lint && pnpm typecheck && pnpm test",
     "release:verify": "pnpm lint && pnpm typecheck && pnpm test",
     "db:migrate": "psql \"$DATABASE_URL\" -v ON_ERROR_STOP=1 -f db/migrations/0001_foundation.sql",
