@@ -63,7 +63,7 @@ export function DeFiTerminal({ active, identity, onWorldEvent }: DeFiTerminalPro
     try {
       const quote = quoteConstantProductSwap(ALPHA_LIQUIDITY_POOL, "OSA_TEST", amount, 50);
       setSimulationQuote(quote);
-      onWorldEvent(event("defi.quote.created", "SYMULOWANA WYCENA SWAP", "SYMULACJA"));
+      onWorldEvent(event("defi.quote.created", "SYMULOWANA WYCENA SWAP", "SIMULATED"));
     } catch (error) {
       setSimulationQuote(null);
       setLiveError(message(error));
@@ -73,7 +73,7 @@ export function DeFiTerminal({ active, identity, onWorldEvent }: DeFiTerminalPro
   const addSimulatedLiquidity = () => {
     const next = createSimulatedLiquidityPosition(ALPHA_LIQUIDITY_POOL, 10_000, 5_000);
     setPosition(next);
-    onWorldEvent(event("defi.liquidity.position.created", "POZYCJA PŁYNNOŚCI UTWORZONA", "SYMULACJA"));
+    onWorldEvent(event("defi.liquidity.position.created", "POZYCJA PŁYNNOŚCI UTWORZONA", "SIMULATED"));
   };
 
   const quoteLive = async () => {
