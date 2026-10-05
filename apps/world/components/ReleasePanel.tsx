@@ -31,7 +31,7 @@ export function ReleasePanel({
     let cancelled=false;
     void fetch("/api/release-proof",{cache:"no-store"})
       .then(async response=>{
-        if(!response.ok)throw new Error("Release proof endpoint failed");
+        if(!response.ok)throw new Error("Endpoint release proof nie odpowiedział");
         return response.json() as Promise<ReleaseData>;
       })
       .then(result=>{
@@ -41,7 +41,7 @@ export function ReleasePanel({
           id:"w_evt_"+Date.now().toString(36),
           type:"release.proof.loaded",
           district:"nexus",
-          label:"GOAL 60/60 VERIFIED",
+          label:"GOAL 60/60 ZWERYFIKOWANY",
           mode:"REAL"
         });
       })
@@ -52,18 +52,18 @@ export function ReleasePanel({
   if(!active)return null;
 
   return (
-    <aside className="release-terminal" aria-label="OSA Release Proof">
+    <aside className="release-terminal" aria-label="Release Proof OSA">
       <div className="release-head">
-        <div><span>OSA CRYPTO WORLD // V0.1</span><h2>GOAL LOCK COMPLETE</h2></div>
-        <strong>{data ? data.release.tasks.completed+"/"+data.release.tasks.total : "VERIFYING"}</strong>
+        <div><span>OSA AGENT WORLD // V0.1</span><h2>GOAL LOCK / ZAMKNIĘTY</h2></div>
+        <strong>{data ? data.release.tasks.completed+"/"+data.release.tasks.total : "WERYFIKACJA"}</strong>
       </div>
 
-      {!data ? <div className="release-loading">{error ?? "RUNNING RELEASE PROOF..."}</div> : (
+      {!data ? <div className="release-loading">{error ?? "URUCHAMIANIE RELEASE PROOF..."}</div> : (
         <>
           <div className="release-status">
-            <span>REFERENCE LOOP</span><strong>{data.release.status}</strong>
-            <span>SECURITY GATE</span><strong>{data.security.status}</strong>
-            <span>CORRELATION</span><code>{data.release.correlationId}</code>
+            <span>PĘTLA REFERENCYJNA</span><strong>{data.release.status}</strong>
+            <span>BRAMA BEZPIECZEŃSTWA</span><strong>{data.security.status}</strong>
+            <span>KORELACJA</span><code>{data.release.correlationId}</code>
           </div>
 
           <div className="release-steps">

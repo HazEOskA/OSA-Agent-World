@@ -31,7 +31,7 @@ export function NodeGrid({
     let cancelled=false;
     void fetch("/api/network-demo",{cache:"no-store"})
       .then(async response=>{
-        if(!response.ok)throw new Error("Network snapshot failed");
+        if(!response.ok)throw new Error("Snapshot sieci nie powiódł się");
         return response.json() as Promise<NetworkSnapshot>;
       })
       .then(snapshot=>{
@@ -41,7 +41,7 @@ export function NodeGrid({
           id:"w_evt_"+Date.now().toString(36),
           type:"network.snapshot.loaded",
           district:"nodes",
-          label:"NODE GRID SYNCHRONIZED",
+          label:"TOPOLOGIA WĘZŁÓW ZSYNCHRONIZOWANA",
           mode:"SIMULATED"
         });
       })
@@ -52,19 +52,19 @@ export function NodeGrid({
   if(!active)return null;
 
   return (
-    <aside className="node-terminal" aria-label="OSA Node Grid">
+    <aside className="node-terminal" aria-label="Topologia infrastruktury OSA">
       <div className="node-head">
-        <div><span>NODE GRID // NETWORK TOPOLOGY</span><h2>INFRASTRUCTURE MESH</h2></div>
-        <strong>SIMULATED NETWORK</strong>
+        <div><span>INFRA // TOPOLOGIA SIECI</span><h2>SIATKA INFRASTRUKTURY</h2></div>
+        <strong>SIEĆ SYMULOWANA</strong>
       </div>
 
-      {!data ? <div className="node-loading">{error ?? "SYNCHRONIZING NODES..."}</div> : (
+      {!data ? <div className="node-loading">{error ?? "SYNCHRONIZACJA WĘZŁÓW..."}</div> : (
         <>
           <div className="node-truth">{data.truth}</div>
           <div className="node-summary">
-            <div><span>RPC CHAIN</span><strong>{String(data.rpc.chainId.result)}</strong></div>
-            <div><span>L1 HEIGHT</span><strong>{String(data.rpc.blockNumber.result)}</strong></div>
-            <div><span>INDEXED</span><strong>{data.index.entities}</strong></div>
+            <div><span>RPC / CHAIN</span><strong>{String(data.rpc.chainId.result)}</strong></div>
+            <div><span>WYSOKOŚĆ L1</span><strong>{String(data.rpc.blockNumber.result)}</strong></div>
+            <div><span>ZAINDEKSOWANE</span><strong>{data.index.entities}</strong></div>
             <div><span>RELAYER</span><strong>{data.relayer.status}</strong></div>
           </div>
 
@@ -80,9 +80,9 @@ export function NodeGrid({
           </div>
 
           <div className="finality-panel">
-            <span>VALIDATOR FINALITY</span>
-            <strong>{data.finality?.finalized ? "FINALIZED" : "NOT FINALIZED"}</strong>
-            <i>{data.finality ? data.finality.approvals+"/"+data.finality.required+" approvals" : "NO BLOCK"}</i>
+            <span>FINALNOŚĆ WALIDATORÓW</span>
+            <strong>{data.finality?.finalized ? "FINALNE" : "NOT FINALNE"}</strong>
+            <i>{data.finality ? data.finality.approvals+"/"+data.finality.required+" zatwierdzeń" : "BRAK BLOKU"}</i>
           </div>
 
           <div className="topology-links">

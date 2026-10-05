@@ -29,7 +29,7 @@ export function MarketZone({
     let cancelled=false;
     void fetch("/api/market-demo",{cache:"no-store"})
       .then(async response=>{
-        if(!response.ok)throw new Error("Market snapshot failed");
+        if(!response.ok)throw new Error("Snapshot rynku nie powiódł się");
         return response.json() as Promise<MarketData>;
       })
       .then(snapshot=>{
@@ -39,7 +39,7 @@ export function MarketZone({
           id:"w_evt_"+Date.now().toString(36),
           type:"market.snapshot.loaded",
           district:"market",
-          label:"AGENT MARKET ONLINE",
+          label:"RYNEK AGENTÓW ONLINE",
           mode:"SIMULATED"
         });
       })
@@ -50,13 +50,13 @@ export function MarketZone({
   if(!active)return null;
 
   return (
-    <aside className="market-terminal" aria-label="OSA Market Zone">
+    <aside className="market-terminal" aria-label="Rynek agentów OSA">
       <div className="market-head">
-        <div><span>MARKET ZONE // AGENT ECONOMY</span><h2>SERVICES / SKILLS / COMPUTE</h2></div>
-        <strong>SIMULATED ECONOMY</strong>
+        <div><span>RYNEK // EKONOMIA AGENTÓW</span><h2>USŁUGI / SKILLE / COMPUTE</h2></div>
+        <strong>EKONOMIA SYMULOWANA</strong>
       </div>
 
-      {!data ? <div className="market-loading">{error ?? "DISCOVERING SERVICES..."}</div> : (
+      {!data ? <div className="market-loading">{error ?? "WYSZUKIWANIE USŁUG..."}</div> : (
         <>
           <div className="market-truth">{data.truth}</div>
           <div className="market-listings">
@@ -71,16 +71,16 @@ export function MarketZone({
           </div>
 
           <div className="market-discovery">
-            <span>SERVICE DISCOVERY // dependency.inspect ≤ 2</span>
-            <strong>{data.discovery[0]?.listing.title ?? "NO MATCH"}</strong>
+            <span>WYSZUKIWANIE USŁUG // dependency.inspect ≤ 2</span>
+            <strong>{data.discovery[0]?.listing.title ?? "BRAK DOPASOWANIA"}</strong>
             <i>SCORE {data.discovery[0]?.score ?? 0}</i>
           </div>
 
           <div className="market-payment">
-            <span>AGENT → AGENT PAYMENT INTENT</span>
-            <strong>{data.payment?.decision ?? "NO INTENT"}</strong>
+            <span>INTENCJA PŁATNOŚCI AGENT → AGENT</span>
+            <strong>{data.payment?.decision ?? "BRAK INTENCJI"}</strong>
             <code>{data.payment?.intent.intentId ?? "NONE"}</code>
-            <i>{data.payment ? data.payment.intent.amount+" "+data.payment.intent.asset+" → "+data.payment.intent.sellerId : "NO ROUTE"}</i>
+            <i>{data.payment ? data.payment.intent.amount+" "+data.payment.intent.asset+" → "+data.payment.intent.sellerId : "BRAK TRASY"}</i>
           </div>
         </>
       )}
