@@ -9,7 +9,7 @@ import {
 } from "@osa/domain";
 import { buildEvidenceRecord } from "@osa/evidence";
 import { ReferenceOsaRuntime } from "@osa/execution-service";
-import { REFERENCE_MARKET,discoverServices } from "@osa/market-core";
+import { discoverServices,type MarketListing } from "@osa/market-core";
 import { MissionService } from "@osa/mission-service";
 import { buildReferenceNetwork } from "@osa/network-core";
 import { buildReferenceDevnet } from "@osa/osa-devnet";
@@ -45,9 +45,26 @@ export interface ReleaseProof {
     bridge:"SIMULATED + TESTNET";
     osaChain:"SIMULATED DEVNET";
     nodeNetwork:"SIMULATED";
-    marketplace:"SIMULATED";
+    marketplace:"REFERENCE FIXTURE";
   };
 }
+
+const RELEASE_MARKET_FIXTURE:readonly MarketListing[]=[
+  {
+    listingId:"lst_release_dependency",
+    kind:"SKILL",
+    sellerId:"osa:release",
+    title:"Release Dependency Fixture",
+    capabilities:["dependency.inspect"],
+    priceAsset:"OSA_USDC_TEST",
+    priceAmount:"1",
+    reputation:90,
+    availability:"LIVE",
+    endpoint:"https://release.invalid/dependency",
+    registeredAt:"2026-10-03T00:00:00Z",
+    lastSeenAt:"2026-10-03T00:00:01Z"
+  }
+];
 
 export async function runReleaseReferenceLoop():Promise<ReleaseProof> {
   const correlationId="cor_release_osa_world_001";
@@ -136,12 +153,12 @@ export async function runReleaseReferenceLoop():Promise<ReleaseProof> {
   if(network.nodes.length<5)throw new Error("Node network incomplete");
   steps.push({code:"NETWORK",status:"PASS",detail:`nodes=${network.nodes.length}`});
 
-  const discovery=discoverServices(REFERENCE_MARKET,{capability:"dependency.inspect",maxPrice:2});
+  const discovery=discoverServices(RELEASE_MARKET_FIXTURE,{capability:"dependency.inspect",maxPrice:2});
   const listing=discovery[0]?.listing;
-  if(!listing)throw new Error("Service discovery failed");
+  if(!listing)throw new Error("Reference service discovery failed");
   const payment=authorizeAgentPayment(KAI_WALLET_POLICY,createAgentPaymentIntent(KAI_AGENT.agentId,listing));
   if(payment.decision!=="ALLOW")throw new Error("Agent payment policy failed");
-  steps.push({code:"MARKET",status:"PASS",detail:listing.listingId});
+  steps.push({code:"MARKET",status:"PASS",detail:`fixture:${listing.listingId}`});
 
   return {
     status:"PASS",
@@ -163,7 +180,7 @@ export async function runReleaseReferenceLoop():Promise<ReleaseProof> {
       bridge:"SIMULATED + TESTNET",
       osaChain:"SIMULATED DEVNET",
       nodeNetwork:"SIMULATED",
-      marketplace:"SIMULATED"
+      marketplace:"REFERENCE FIXTURE"
     }
   };
 }

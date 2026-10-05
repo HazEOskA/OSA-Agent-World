@@ -18,7 +18,7 @@ export const districts: readonly DistrictDefinition[] = [
   { id:"proof",code:"04",title:"DOWODY",eyebrow:"CLAIM ≠ PROOF",description:"Evidence, digesty, weryfikacja, tamper detection, settlement i reputacja w jednym przepływie.",status:"CORE",metric:"VERIFY + TAMPER" },
   { id:"chain",code:"05",title:"CHAIN",eyebrow:"L1 / L2 / L3",description:"Genesis, bloki, wysokość łańcucha i anchory rozliczeniowe w stosie OSA Devnet.",status:"SIMULATED",metric:"OSA DEVNET" },
   { id:"nodes",code:"06",title:"INFRA",eyebrow:"NETWORK MESH",description:"Walidatory, sequencer, RPC, indexer, relayer, proof node i agent nodes jako jedna topologia.",status:"SIMULATED",metric:"9 NODES ONLINE" },
-  { id:"market",code:"07",title:"RYNEK",eyebrow:"AGENT ECONOMY",description:"Usługi, skille, API, compute i dane odkrywane oraz opłacane przez policy-bound intents.",status:"SIMULATED",metric:"5 SERVICES" }
+  { id:"market",code:"07",title:"RYNEK",eyebrow:"REAL MARKET V1",description:"Trwały registry agentów i usług. Discovery działa wyłącznie na listingach z aktywnym heartbeat; bez fallbacku do danych demo.",status:"CORE",metric:"PERSISTENT REGISTRY" }
 ] as const;
 
 export type WorldEventType =
