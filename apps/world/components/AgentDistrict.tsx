@@ -72,29 +72,29 @@ export function AgentDistrict({ active, onWorldEvent }: AgentDistrictProps) {
         rewardAmount: "5",
         correlationId: "cor_kai_alpha_001"
       });
-      setTrace((current) => [...current, "MISSION CREATED"]);
+      setTrace((current) => [...current, "MISJA UTWORZONA"]);
 
       service.transition(mission.missionId, "FUNDED");
       setMissionState("FUNDED");
-      setTrace((current) => [...current, "REWARD LOCKED / 5 OSA_USDC_TEST"]);
+      setTrace((current) => [...current, "NAGRODA ZABLOKOWANA / 5 OSA_USDC_TEST"]);
 
       service.transition(mission.missionId, "OPEN");
       service.assign(mission.missionId, KAI_AGENT.agentId);
       service.transition(mission.missionId, "ACCEPTED");
       setMissionState("ACCEPTED");
-      setTrace((current) => [...current, "KAI ACCEPTED MISSION"]);
+      setTrace((current) => [...current, "KAI PRZYJĄŁ MISJĘ"]);
 
       if (!capabilityMatch.accepted) throw new Error("Capability match failed");
       if (walletDecision.decision === "DENY") throw new Error("Wallet policy denied reward");
       setMissionState("AUTHORIZED");
       setTrace((current) => [
         ...current,
-        `AUTHORITY / CAPABILITIES PASS / WALLET ${walletDecision.decision}`
+        `AUTORYZACJA / CAPABILITIES PASS / PORTFEL ${walletDecision.decision}`
       ]);
 
       service.transition(mission.missionId, "EXECUTING");
       setMissionState("EXECUTING");
-      emit(onWorldEvent, "agent.execution.started", "KAI EXECUTION STARTED");
+      emit(onWorldEvent, "agent.execution.started", "KAI / WYKONANIE ROZPOCZĘTE");
 
       const currentMission = service.get(mission.missionId);
       const result = await runtime.execute(KAI_AGENT, currentMission);
@@ -106,23 +106,23 @@ export function AgentDistrict({ active, onWorldEvent }: AgentDistrictProps) {
 
       service.transition(mission.missionId, "SUBMITTED");
       setMissionState("SUBMITTED");
-      emit(onWorldEvent, "agent.execution.completed", "KAI RESULT SUBMITTED");
+      emit(onWorldEvent, "agent.execution.completed", "KAI / WYNIK PRZESŁANY");
     } catch (cause) {
       setMissionState("FAILED");
       const value = cause instanceof Error ? cause.message : String(cause);
       setError(value);
-      emit(onWorldEvent, "agent.execution.failed", "KAI EXECUTION FAILED");
+      emit(onWorldEvent, "agent.execution.failed", "KAI / WYKONANIE NIEUDANE");
     }
   };
 
   if (!active) return null;
 
   return (
-    <aside className="agent-terminal" aria-label="OSA Agent District">
+    <aside className="agent-terminal" aria-label="Panel agentów OSA">
       <div className="agent-head">
         <div>
-          <span>AGENT DISTRICT // AUTONOMOUS ECONOMY</span>
-          <h2>KAI / CODE SECURITY AUDITOR</h2>
+          <span>AGENTY // RUNTIME I AUTORYZACJA</span>
+          <h2>KAI / AUDYTOR BEZPIECZEŃSTWA KODU</h2>
         </div>
         <strong>{KAI_AGENT.status}</strong>
       </div>
@@ -143,7 +143,7 @@ export function AgentDistrict({ active, onWorldEvent }: AgentDistrictProps) {
         </section>
 
         <section>
-          <div className="agent-module-title">CAPABILITY MATRIX</div>
+          <div className="agent-module-title">MACIERZ MOŻLIWOŚCI</div>
           <div className="capability-list">
             {KAI_AGENT.capabilities.map((capability) => (
               <span key={capability}>{capability}</span>
@@ -151,16 +151,16 @@ export function AgentDistrict({ active, onWorldEvent }: AgentDistrictProps) {
           </div>
 
           <div className="agent-status-row">
-            <span>MISSION MATCH</span>
+            <span>ZGODNOŚĆ MISJI</span>
             <strong>{capabilityMatch.accepted ? "PASS" : "FAIL"}</strong>
           </div>
           <div className="agent-status-row">
-            <span>WALLET POLICY</span>
+            <span>POLITYKA PORTFELA</span>
             <strong>{walletDecision.decision}</strong>
           </div>
           <div className="agent-status-row">
-            <span>AUTHORITY</span>
-            <strong>READ-ONLY REFERENCE</strong>
+            <span>UPRAWNIENIA</span>
+            <strong>REFERENCYJNE / TYLKO ODCZYT</strong>
           </div>
 
           <button
@@ -169,17 +169,17 @@ export function AgentDistrict({ active, onWorldEvent }: AgentDistrictProps) {
             onClick={() => void runMission()}
             disabled={missionState !== "READY" && missionState !== "FAILED"}
           >
-            RUN REFERENCE MISSION
+            URUCHOM MISJĘ REFERENCYJNĄ
           </button>
         </section>
       </div>
 
       <section className="mission-trace">
         <div className="agent-module-title">
-          MISSION TRACE <b>{missionState}</b>
+          ŚLAD MISJI <b>{missionState}</b>
         </div>
         {trace.length === 0 ? (
-          <div className="agent-empty">NO EXECUTION YET</div>
+          <div className="agent-empty">BRAK WYKONANIA</div>
         ) : (
           trace.map((item, index) => (
             <div className="agent-trace-step" key={`${item}-${index}`}>

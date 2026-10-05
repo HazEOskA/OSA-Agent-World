@@ -63,7 +63,7 @@ export function DeFiTerminal({ active, identity, onWorldEvent }: DeFiTerminalPro
     try {
       const quote = quoteConstantProductSwap(ALPHA_LIQUIDITY_POOL, "OSA_TEST", amount, 50);
       setSimulationQuote(quote);
-      onWorldEvent(event("defi.quote.created", "SIMULATED SWAP QUOTE", "SIMULATED"));
+      onWorldEvent(event("defi.quote.created", "SYMULOWANA WYCENA SWAP", "SYMULACJA"));
     } catch (error) {
       setSimulationQuote(null);
       setLiveError(message(error));
@@ -73,7 +73,7 @@ export function DeFiTerminal({ active, identity, onWorldEvent }: DeFiTerminalPro
   const addSimulatedLiquidity = () => {
     const next = createSimulatedLiquidityPosition(ALPHA_LIQUIDITY_POOL, 10_000, 5_000);
     setPosition(next);
-    onWorldEvent(event("defi.liquidity.position.created", "LIQUIDITY POSITION CREATED", "SIMULATED"));
+    onWorldEvent(event("defi.liquidity.position.created", "POZYCJA PŁYNNOŚCI UTWORZONA", "SYMULACJA"));
   };
 
   const quoteLive = async () => {
@@ -84,12 +84,12 @@ export function DeFiTerminal({ active, identity, onWorldEvent }: DeFiTerminalPro
       const quote = await quoteSepoliaEthToUsdc(ethAmount, 50);
       setLiveQuote(quote);
       setLiveState("READY");
-      onWorldEvent(event("defi.quote.created", "UNISWAP TESTNET QUOTE", "TESTNET"));
+      onWorldEvent(event("defi.quote.created", "WYCENA UNISWAP TESTNET", "TESTNET"));
     } catch (error) {
       setLiveQuote(null);
       setLiveState("FAILED");
       setLiveError(message(error));
-      onWorldEvent(event("defi.swap.failed", "UNISWAP QUOTE FAILED", "TESTNET"));
+      onWorldEvent(event("defi.swap.failed", "WYCENA UNISWAP NIEUDANA", "TESTNET"));
     }
   };
 
@@ -107,32 +107,32 @@ export function DeFiTerminal({ active, identity, onWorldEvent }: DeFiTerminalPro
           onSubmitted: (submittedHash) => {
             setLiveTx(submittedHash);
             setLiveState("SUBMITTED");
-            onWorldEvent(event("defi.swap.submitted", "UNISWAP SWAP SUBMITTED", "TESTNET"));
+            onWorldEvent(event("defi.swap.submitted", "SWAP UNISWAP PRZESŁANY", "TESTNET"));
           }
         }
       );
 
       setLiveTx(hash);
       setLiveState("CONFIRMED");
-      onWorldEvent(event("defi.swap.confirmed", "UNISWAP SWAP CONFIRMED", "TESTNET"));
+      onWorldEvent(event("defi.swap.confirmed", "SWAP UNISWAP POTWIERDZONY", "TESTNET"));
     } catch (error) {
       setLiveState("FAILED");
       setLiveError(message(error));
-      onWorldEvent(event("defi.swap.failed", "UNISWAP SWAP FAILED", "TESTNET"));
+      onWorldEvent(event("defi.swap.failed", "SWAP UNISWAP NIEUDANY", "TESTNET"));
     }
   };
 
   if (!active) return null;
 
   return (
-    <aside className="defi-terminal" aria-label="OSA DeFi District">
+    <aside className="defi-terminal" aria-label="Panel DeFi OSA">
       <div className="defi-terminal-head">
         <div>
-          <span>DEFI DISTRICT // ALPHA</span>
-          <h2>LIQUIDITY ENGINE</h2>
+          <span>DEFI // ALPHA</span>
+          <h2>SILNIK PŁYNNOŚCI</h2>
         </div>
         <div className="defi-mode-legend">
-          <b>SIMULATED</b>
+          <b>SYMULACJA</b>
           <i>+</i>
           <strong>TESTNET</strong>
         </div>
@@ -142,13 +142,13 @@ export function DeFiTerminal({ active, identity, onWorldEvent }: DeFiTerminalPro
         <section className="defi-module simulation-module">
           <div className="module-title">
             <span>01</span>
-            <strong>OSA SWAP SIM</strong>
-            <i>SIMULATED</i>
+            <strong>OSA SWAP / SYMULACJA</strong>
+            <i>SYMULACJA</i>
           </div>
 
           <div className="swap-pair">
             <label>
-              <span>FROM</span>
+              <span>Z</span>
               <strong>OSA_TEST</strong>
             </label>
             <input
@@ -158,7 +158,7 @@ export function DeFiTerminal({ active, identity, onWorldEvent }: DeFiTerminalPro
             />
             <div className="swap-arrow">↓</div>
             <label>
-              <span>TO</span>
+              <span>DO</span>
               <strong>USDC_TEST</strong>
             </label>
           </div>
@@ -166,20 +166,20 @@ export function DeFiTerminal({ active, identity, onWorldEvent }: DeFiTerminalPro
           <div className="quote-strip">
             <span>POOL</span>
             <b>{ALPHA_LIQUIDITY_POOL.poolId}</b>
-            <span>MID PRICE</span>
+            <span>CENA ŚRODKOWA</span>
             <b>{poolPrice.toFixed(4)}</b>
           </div>
 
           {simulationQuote ? (
             <div className="quote-result">
-              <span>EST. RECEIVE</span>
+              <span>SZACOWANY ODBIÓR</span>
               <strong>{simulationQuote.amountOut.toFixed(4)} USDC_TEST</strong>
               <i>MIN {simulationQuote.minimumReceived.toFixed(4)}</i>
             </div>
           ) : null}
 
           <button type="button" className="defi-action" onClick={simulate}>
-            GENERATE SIMULATION
+            URUCHOM SYMULACJĘ
           </button>
         </section>
 
@@ -192,7 +192,7 @@ export function DeFiTerminal({ active, identity, onWorldEvent }: DeFiTerminalPro
 
           <div className="swap-pair">
             <label>
-              <span>FROM</span>
+              <span>Z</span>
               <strong>ETH</strong>
             </label>
             <input
@@ -202,23 +202,23 @@ export function DeFiTerminal({ active, identity, onWorldEvent }: DeFiTerminalPro
             />
             <div className="swap-arrow">↓</div>
             <label>
-              <span>TO</span>
+              <span>DO</span>
               <strong>USDC</strong>
             </label>
           </div>
 
           <div className="live-wallet-state">
-            <span>IDENTITY</span>
+            <span>TOŻSAMOŚĆ</span>
             <b>
               {canExecuteLive && identity
                 ? shortenAddress(identity.primaryWallet.address, 6)
-                : "EVM WALLET REQUIRED"}
+                : "WYMAGANY PORTFEL EVM"}
             </b>
           </div>
 
           {liveQuote ? (
             <div className="quote-result testnet-result">
-              <span>LIVE QUOTE</span>
+              <span>WYCENA LIVE</span>
               <strong>{liveQuote.amountOutFormatted} USDC</strong>
               <i>
                 FEE TIER {liveQuote.fee / 10_000}% · MIN {liveQuote.minimumOutFormatted}
@@ -233,7 +233,7 @@ export function DeFiTerminal({ active, identity, onWorldEvent }: DeFiTerminalPro
               onClick={() => void quoteLive()}
               disabled={liveState === "QUOTING" || liveState === "SUBMITTED"}
             >
-              {liveState === "QUOTING" ? "QUOTING..." : "GET LIVE QUOTE"}
+              {liveState === "QUOTING" ? "QUOTING..." : "GET WYCENA LIVE"}
             </button>
             <button
               type="button"
@@ -241,14 +241,14 @@ export function DeFiTerminal({ active, identity, onWorldEvent }: DeFiTerminalPro
               onClick={() => void executeLive()}
               disabled={!canExecuteLive || !liveQuote || liveState === "SUBMITTED"}
             >
-              EXECUTE TESTNET SWAP
+              WYKONAJ SWAP TESTNET
             </button>
           </div>
 
           <div className="live-status">
-            <span>STATE</span>
+            <span>STAN</span>
             <strong>{liveState}</strong>
-            <i>{liveTx ? shortenAddress(liveTx, 8) : "NO TRANSACTION"}</i>
+            <i>{liveTx ? shortenAddress(liveTx, 8) : "BRAK TRANSAKCJI"}</i>
           </div>
 
           {liveError ? <div className="defi-error">{liveError}</div> : null}
@@ -258,8 +258,8 @@ export function DeFiTerminal({ active, identity, onWorldEvent }: DeFiTerminalPro
       <section className="liquidity-core">
         <div className="module-title">
           <span>03</span>
-          <strong>LIQUIDITY CORE</strong>
-          <i>SIMULATED POSITION MODEL</i>
+          <strong>RDZEŃ PŁYNNOŚCI</strong>
+          <i>SYMULACJA POSITION MODEL</i>
         </div>
 
         {position ? (
@@ -282,7 +282,7 @@ export function DeFiTerminal({ active, identity, onWorldEvent }: DeFiTerminalPro
           </div>
         ) : (
           <button type="button" className="liquidity-create" onClick={addSimulatedLiquidity}>
-            MATERIALIZE POSITION
+            UTWÓRZ POZYCJĘ
           </button>
         )}
       </section>

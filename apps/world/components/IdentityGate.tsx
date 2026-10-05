@@ -82,7 +82,7 @@ export function IdentityGate({
       setIdentity(next);
       onIdentityChange(next);
       setUiError(null);
-      onWorldEvent(buildWorldEvent("identity.wallet.connected", `${wallet.kind} WALLET CONNECTED`));
+      onWorldEvent(buildWorldEvent("identity.wallet.connected", `${wallet.kind} / PORTFEL POŁĄCZONY`));
     },
     [onIdentityChange, onWorldEvent]
   );
@@ -131,19 +131,19 @@ export function IdentityGate({
     setIdentity(null);
     onIdentityChange(null);
     txDispatch({ type: "RESET" });
-    onWorldEvent(buildWorldEvent("identity.wallet.disconnected", "IDENTITY SESSION CLEARED"));
+    onWorldEvent(buildWorldEvent("identity.wallet.disconnected", "SESJA TOŻSAMOŚCI WYCZYSZCZONA"));
   };
 
   const emitTxEvent = (event: TransactionEvent) => {
     txDispatch(event);
     if (event.type === "REQUEST_SIGNATURE") {
-      onWorldEvent(buildWorldEvent("transaction.signature.requested", "WALLET SIGNATURE REQUESTED"));
+      onWorldEvent(buildWorldEvent("transaction.signature.requested", "ŻĄDANIE PODPISU PORTFELA"));
     }
     if (event.type === "SUBMITTED") {
-      onWorldEvent(buildWorldEvent("transaction.submitted", "TESTNET TRANSACTION SUBMITTED"));
+      onWorldEvent(buildWorldEvent("transaction.submitted", "TRANSAKCJA TESTNET PRZESŁANA"));
     }
     if (event.type === "CONFIRMED") {
-      onWorldEvent(buildWorldEvent("transaction.confirmed", "CHAIN CONFIRMED"));
+      onWorldEvent(buildWorldEvent("transaction.confirmed", "CHAIN / POTWIERDZONE"));
     }
     if (event.type === "FAILED" || event.type === "BLOCKED") {
       onWorldEvent(buildWorldEvent("transaction.failed", event.message));
@@ -160,8 +160,8 @@ export function IdentityGate({
         type: "BLOCKED",
         message:
           wallet.kind === "EVM"
-            ? "Sepolia ETH required for gas"
-            : "Devnet SOL required for transaction fees"
+            ? "Wymagane Sepolia ETH na gas"
+            : "Wymagane Devnet SOL na opłaty"
       });
       return;
     }
@@ -203,15 +203,15 @@ export function IdentityGate({
   if (!open) return null;
 
   return (
-    <section className="identity-gate" aria-label="OSA Identity Gate">
+    <section className="identity-gate" aria-label="Brama tożsamości OSA">
       <div className="identity-grid" aria-hidden="true" />
       <div className="identity-head">
         <div>
-          <span className="identity-kicker">IDENTITY GATE // TESTNET</span>
-          <h2>{identity ? "IDENTITY LINKED" : "CONNECT TO THE WORLD"}</h2>
+          <span className="identity-kicker">TOŻSAMOŚĆ // TESTNET</span>
+          <h2>{identity ? "TOŻSAMOŚĆ POŁĄCZONA" : "POŁĄCZ TOŻSAMOŚĆ"}</h2>
         </div>
         <button type="button" className="gate-close" onClick={onClose} aria-label="Enter as observer">
-          OBSERVER ↗
+          TRYB OBSERWATORA ↗
         </button>
       </div>
 
@@ -219,19 +219,19 @@ export function IdentityGate({
         <div className="wallet-choices">
           <button type="button" className="wallet-path evm-path" onClick={connectEvm} disabled={evmBusy}>
             <span>EVM</span>
-            <strong>{evmBusy ? "CONNECTING..." : "ETHEREUM SEPOLIA"}</strong>
-            <i>REAL TESTNET</i>
+            <strong>{evmBusy ? "ŁĄCZENIE..." : "ETHEREUM SEPOLIA"}</strong>
+            <i>TESTNET</i>
           </button>
 
           <div className="solana-wallets">
             <div className="wallet-path-label">
               <span>SOLANA</span>
-              <strong>{isSolanaReady ? "DEVNET WALLETS" : "DISCOVERING WALLETS..."}</strong>
-              <i>WALLET STANDARD</i>
+              <strong>{isSolanaReady ? "PORTFELE DEVNET" : "WYKRYWANIE PORTFELI..."}</strong>
+              <i>STANDARD PORTFELA</i>
             </div>
             <div className="wallet-list">
               {wallets.length === 0 ? (
-                <div className="no-wallet">NO SOLANA WALLET DETECTED</div>
+                <div className="no-wallet">NIE WYKRYTO PORTFELA SOLANA</div>
               ) : (
                 wallets.map((wallet) => (
                   <button
@@ -250,35 +250,35 @@ export function IdentityGate({
       ) : (
         <div className="identity-live">
           <div className="identity-core">
-            <span>OSA IDENTITY</span>
+            <span>TOŻSAMOŚĆ OSA</span>
             <strong>{identity.identityId}</strong>
             <i>{identity.primaryWallet.mode}</i>
           </div>
 
           <dl className="wallet-telemetry">
             <div>
-              <dt>WALLET</dt>
+              <dt>PORTFEL</dt>
               <dd>{shortenAddress(identity.primaryWallet.address, 6)}</dd>
             </div>
             <div>
-              <dt>NETWORK</dt>
+              <dt>SIEĆ</dt>
               <dd>{identity.primaryWallet.network}</dd>
             </div>
             <div>
-              <dt>BALANCE</dt>
+              <dt>SALDO</dt>
               <dd>
                 {identity.primaryWallet.balance} {identity.primaryWallet.nativeAsset}
               </dd>
             </div>
             <div>
-              <dt>RISK</dt>
-              <dd>TESTNET ONLY</dd>
+              <dt>RYZYKO</dt>
+              <dd>TYLKO TESTNET</dd>
             </div>
           </dl>
 
           <div className="transaction-core">
             <div>
-              <span>TRANSACTION LIFECYCLE</span>
+              <span>CYKL TRANSAKCJI</span>
               <strong>{tx.status}</strong>
               <i>{tx.txId ? shortenAddress(tx.txId, 8) : tx.message ?? "READY"}</i>
             </div>
@@ -287,7 +287,7 @@ export function IdentityGate({
               onClick={() => void runTestTransaction()}
               disabled={tx.status === "AWAITING_SIGNATURE" || tx.status === "SUBMITTED"}
             >
-              SEND TEST PULSE
+              WYŚLIJ TESTOWĄ TRANSAKCJĘ
             </button>
           </div>
 
@@ -304,14 +304,14 @@ export function IdentityGate({
               EXPLORER ↗
             </a>
             <button type="button" onClick={() => void disconnect()}>
-              CLEAR SESSION
+              WYCZYŚĆ SESJĘ
             </button>
           </div>
         </div>
       )}
 
       <div className="asset-rail">
-        <span>TEST ASSETS</span>
+        <span>AKTYWA TESTOWE</span>
         <b>ETH_TEST / SEPOLIA</b>
         <b>SOL_TEST / DEVNET</b>
         <i>OSA_TEST / SIMULATED</i>
