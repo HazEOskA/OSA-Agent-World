@@ -43,7 +43,7 @@ export function ChainExplorer({
           id:"w_evt_"+Date.now().toString(36),
           type:"chain.snapshot.loaded",
           district:"chain",
-          label:"OSA DEVNET EXPLORER ONLINE",
+          label:"OSA DEVNET / EXPLORER ONLINE",
           mode:"SIMULATED"
         });
       })
@@ -54,14 +54,14 @@ export function ChainExplorer({
   if(!active) return null;
 
   return (
-    <aside className="chain-terminal" aria-label="OSA Chain Explorer">
+    <aside className="chain-terminal" aria-label="Explorer łańcucha OSA">
       <div className="chain-head">
-        <div><span>OSA CHAIN STACK // DEVNET</span><h2>L1 → L2 → L3</h2></div>
-        <strong>SIMULATED DEVNET</strong>
+        <div><span>CHAIN // OSA DEVNET</span><h2>L1 → L2 → L3</h2></div>
+        <strong>SYMULOWANY DEVNET</strong>
       </div>
 
       {!snapshot ? (
-        <div className="chain-loading">{error ?? "BOOTING GENESIS..."}</div>
+        <div className="chain-loading">{error ?? "URUCHAMIANIE GENESIS..."}</div>
       ) : (
         <>
           <div className="chain-truth">{snapshot.truth}</div>
@@ -72,14 +72,14 @@ export function ChainExplorer({
                 <section key={layer.layer}>
                   <span>{layer.layer}</span>
                   <strong>{layer.chainId}</strong>
-                  <i>{layer.parentLayer ? "SETTLES → "+layer.parentLayer : "BASE LAYER"}</i>
-                  <div><b>HEIGHT {state?.height ?? 0}</b><b>TX {state?.txCount ?? 0}</b></div>
+                  <i>{layer.parentLayer ? "ROZLICZA → "+layer.parentLayer : "WARSTWA BAZOWA"}</i>
+                  <div><b>WYSOKOŚĆ {state?.height ?? 0}</b><b>TX {state?.txCount ?? 0}</b></div>
                 </section>
               );
             })}
           </div>
 
-          <div className="chain-section-title">RECENT BLOCKS</div>
+          <div className="chain-section-title">OSTATNIE BLOKI</div>
           <div className="block-stream">
             {snapshot.explorer.recentBlocks.map(block=>(
               <div key={block.blockHash}>
@@ -90,7 +90,7 @@ export function ChainExplorer({
             ))}
           </div>
 
-          <div className="chain-section-title">SETTLEMENT ANCHORS</div>
+          <div className="chain-section-title">ANCHORY ROZLICZENIOWE</div>
           <div className="anchor-stream">
             {snapshot.explorer.anchors.map((anchor,index)=>(
               <div key={anchor.targetTxId+"-"+index}>

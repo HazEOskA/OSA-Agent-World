@@ -46,81 +46,81 @@ export function BridgeTower({
       amount: "25",
       recipient: "osa:observer"
     });
-    emit("bridge.transfer.started", "SIMULATED BRIDGE STARTED", "SIMULATED");
+    emit("bridge.transfer.started", "SYMULOWANY BRIDGE ROZPOCZĘTY", "SIMULATED");
     await runSimulatedBridge(route, setSimTrace);
-    emit("bridge.transfer.completed", "SIMULATED BRIDGE COMPLETE", "SIMULATED");
+    emit("bridge.transfer.completed", "SYMULOWANY BRIDGE ZAKOŃCZONY", "SIMULATED");
   };
 
   const quoteLive = async () => {
     setError(null);
     if (!identity || identity.primaryWallet.kind !== "EVM") {
-      setError("EVM identity on Sepolia path required");
+      setError("Wymagana tożsamość EVM na ścieżce Sepolia");
       return;
     }
     try {
       const quote = await quoteWormholeTestnetTransfer(amount, identity.primaryWallet.address);
       setLiveQuote(quote);
-      emit("bridge.route.created", "WORMHOLE TESTNET ROUTE READY", "TESTNET");
+      emit("bridge.route.created", "TRASA WORMHOLE TESTNET GOTOWA", "TESTNET");
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : String(cause));
-      emit("bridge.transfer.failed", "WORMHOLE ROUTE FAILED", "TESTNET");
+      emit("bridge.transfer.failed", "TRASA WORMHOLE NIEUDANA", "TESTNET");
     }
   };
 
   const executeLive = async () => {
     if (!identity || identity.primaryWallet.kind !== "EVM") return;
     setError(null);
-    emit("bridge.transfer.started", "WORMHOLE TRANSFER STARTED", "TESTNET");
+    emit("bridge.transfer.started", "TRANSFER WORMHOLE ROZPOCZĘTY", "TESTNET");
     try {
       await executeWormholeTestnetTransfer(amount, identity.primaryWallet.address, setLiveTrace);
-      emit("bridge.transfer.completed", "WORMHOLE TRANSFER COMPLETE", "TESTNET");
+      emit("bridge.transfer.completed", "TRANSFER WORMHOLE ZAKOŃCZONY", "TESTNET");
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : String(cause));
-      emit("bridge.transfer.failed", "WORMHOLE TRANSFER FAILED", "TESTNET");
+      emit("bridge.transfer.failed", "TRANSFER WORMHOLE NIEUDANY", "TESTNET");
     }
   };
 
   if (!active) return null;
 
   return (
-    <aside className="bridge-terminal" aria-label="OSA Bridge Tower">
+    <aside className="bridge-terminal" aria-label="Panel Bridge OSA">
       <div className="bridge-head">
         <div>
-          <span>BRIDGE TOWER // CROSS-CHAIN</span>
-          <h2>TELEPORT ASSETS</h2>
+          <span>BRIDGE // CROSS-CHAIN</span>
+          <h2>TRANSFER MIĘDZY SIECIAMI</h2>
         </div>
         <strong>WORMHOLE WTT / TESTNET</strong>
       </div>
 
       <div className="bridge-grid">
         <section>
-          <div className="bridge-module-title">SIMULATION TRACE</div>
+          <div className="bridge-module-title">ŚLAD SYMULACJI</div>
           <button type="button" onClick={() => void runSimulation()}>
-            RUN OSA BRIDGE SIM
+            URUCHOM SYMULACJĘ BRIDGE
           </button>
           <Trace trace={simTrace} />
         </section>
 
         <section>
-          <div className="bridge-module-title">REAL TESTNET ROUTE</div>
+          <div className="bridge-module-title">TRASA TESTNET</div>
           <div className="bridge-route">
             <b>ARBITRUM SEPOLIA</b>
             <span>→</span>
             <b>BASE SEPOLIA</b>
           </div>
           <label>
-            <span>AMOUNT</span>
+            <span>KWOTA</span>
             <input value={amount} onChange={(e) => setAmount(e.target.value)} inputMode="decimal" />
           </label>
           <div className="bridge-actions">
-            <button type="button" onClick={() => void quoteLive()}>GET WORMHOLE QUOTE</button>
+            <button type="button" onClick={() => void quoteLive()}>POBIERZ WYCENĘ WORMHOLE</button>
             <button type="button" disabled={!liveQuote} onClick={() => void executeLive()}>
-              EXECUTE TESTNET BRIDGE
+              WYKONAJ BRIDGE TESTNET
             </button>
           </div>
           {liveQuote ? (
             <div className="bridge-quote">
-              <span>DESTINATION AMOUNT</span>
+              <span>DESTINATION KWOTA</span>
               <strong>{liveQuote.destinationAmount}</strong>
               <i>{liveQuote.route.securityModel}</i>
             </div>
@@ -135,7 +135,7 @@ export function BridgeTower({
 }
 
 function Trace({ trace }: { trace: BridgeTrace | null }) {
-  if (!trace) return <div className="trace-empty">NO TRACE YET</div>;
+  if (!trace) return <div className="trace-empty">BRAK ŚLADU</div>;
   return (
     <div className="cross-chain-trace">
       {trace.steps.map((step, index) => (

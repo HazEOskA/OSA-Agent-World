@@ -36,12 +36,12 @@ export function ProofLab({
       id: `w_evt_${Date.now().toString(36)}`,
       type: "proof.verification.started",
       district: "proof",
-      label: tamper ? "TAMPER TEST STARTED" : "PROOF VERIFICATION STARTED",
+      label: tamper ? "TEST TAMPER ROZPOCZĘTY" : "WERYFIKACJA DOWODU ROZPOCZĘTA",
       mode: "SIMULATED"
     });
     try {
       const response = await fetch(`/api/proof-demo?tamper=${tamper ? "1" : "0"}`, { cache: "no-store" });
-      if (!response.ok) throw new Error("Proof demo request failed");
+      if (!response.ok) throw new Error("Żądanie proof demo nie powiodło się");
       const data = (await response.json()) as ProofDemoResponse;
       setResult(data);
       onWorldEvent({
@@ -59,23 +59,23 @@ export function ProofLab({
   if (!active) return null;
 
   return (
-    <aside className="proof-terminal" aria-label="OSA Proof Lab">
+    <aside className="proof-terminal" aria-label="Laboratorium dowodów OSA">
       <div className="proof-head">
-        <div><span>PROOF LAB // CLAIM ≠ PROOF</span><h2>EXECUTION VERIFICATION</h2></div>
-        <strong>APR / EVIDENCE / SETTLEMENT</strong>
+        <div><span>DOWODY // CLAIM ≠ PROOF</span><h2>WERYFIKACJA WYKONANIA</h2></div>
+        <strong>APR / EVIDENCE / ROZLICZENIE</strong>
       </div>
 
       <div className="proof-actions">
-        <button type="button" onClick={() => void run(false)} disabled={loading}>VERIFY CLEAN EXECUTION</button>
-        <button type="button" className="tamper" onClick={() => void run(true)} disabled={loading}>TAMPER EVIDENCE</button>
+        <button type="button" onClick={() => void run(false)} disabled={loading}>ZWERYFIKUJ CZYSTE WYKONANIE</button>
+        <button type="button" className="tamper" onClick={() => void run(true)} disabled={loading}>NARUSZ EVIDENCE</button>
       </div>
 
       {!result ? (
-        <div className="proof-empty">RUN A VERIFICATION PATH</div>
+        <div className="proof-empty">URUCHOM ŚCIEŻKĘ WERYFIKACJI</div>
       ) : (
         <>
           <div className={`proof-core-result ${result.verification.status.toLowerCase()}`}>
-            <span>VERIFICATION</span>
+            <span>WERYFIKACJA</span>
             <strong>{result.verification.status}</strong>
             <i>{result.invariant}</i>
           </div>
@@ -86,13 +86,13 @@ export function ProofLab({
             ))}
           </div>
 
-          <div className="proof-root"><span>EVIDENCE ROOT</span><code>{result.evidenceRoot}</code></div>
+          <div className="proof-root"><span>ROOT EVIDENCE</span><code>{result.evidenceRoot}</code></div>
 
           <div className="proof-economy-grid">
-            <div><span>SETTLEMENT</span><strong>{result.settlement?.status ?? "BLOCKED"}</strong></div>
-            <div><span>PROOFS VERIFIED</span><strong>{result.reputation.proofsVerified}</strong></div>
-            <div><span>PROOFS FAILED</span><strong>{result.reputation.proofsFailed}</strong></div>
-            <div><span>EARNED</span><strong>{result.reputation.earned.OSA_USDC_TEST ?? 0} OSA_USDC_TEST</strong></div>
+            <div><span>ROZLICZENIE</span><strong>{result.settlement?.status ?? "BLOCKED"}</strong></div>
+            <div><span>DOWODY ZWERYFIKOWANE</span><strong>{result.reputation.proofsVerified}</strong></div>
+            <div><span>DOWODY ODRZUCONE</span><strong>{result.reputation.proofsFailed}</strong></div>
+            <div><span>ZAROBIONO</span><strong>{result.reputation.earned.OSA_USDC_TEST ?? 0} OSA_USDC_TEST</strong></div>
           </div>
 
           {result.verification.reasons.length > 0 ? (
