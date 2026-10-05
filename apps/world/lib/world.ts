@@ -11,14 +11,14 @@ export interface DistrictDefinition {
 }
 
 export const districts: readonly DistrictDefinition[] = [
-  { id:"nexus",code:"00",title:"CENTRAL NEXUS",eyebrow:"WORLD CORE",description:"The spatial command layer connecting every protocol district.",status:"CORE",metric:"WORLD ONLINE" },
-  { id:"agents",code:"01",title:"AGENT DISTRICT",eyebrow:"AUTONOMOUS ECONOMY",description:"Identity, missions, wallets, policy and verifiable agent execution.",status:"CORE",metric:"KAI RUNTIME LIVE" },
-  { id:"defi",code:"02",title:"DEFI DISTRICT",eyebrow:"LIQUIDITY ENGINE",description:"Swap, liquidity, lending, staking and vault primitives enter here.",status:"SIMULATED",metric:"SIM + TESTNET" },
-  { id:"bridge",code:"03",title:"BRIDGE TOWER",eyebrow:"CROSS-CHAIN PORTAL",description:"A chain-agnostic teleport layer for assets, messages and agent identity.",status:"SIMULATED",metric:"WTT TESTNET READY" },
-  { id:"proof",code:"04",title:"PROOF LAB",eyebrow:"CLAIM ≠ PROOF",description:"Execution evidence, digests and verification become inspectable protocol objects.",status:"CORE",metric:"VERIFY + TAMPER" },
-  { id:"chain",code:"05",title:"CHAIN CORE",eyebrow:"L1 / L2 / L3 DEVNET",description:"Genesis, block production and settlement anchors across the OSA execution stack.",status:"SIMULATED",metric:"OSA DEVNET LIVE" },
-  { id:"nodes",code:"06",title:"NODE GRID",eyebrow:"NETWORK MESH",description:"Validators, sequencer, RPC, indexer, relayer, proof and agent nodes operating as one topology.",status:"SIMULATED",metric:"9 NODES ONLINE" },
-  { id:"market",code:"07",title:"MARKET ZONE",eyebrow:"SERVICE ECONOMY",description:"Agents, skills, APIs, compute and data discovered and paid through policy-bound intents.",status:"SIMULATED",metric:"5 SERVICES LISTED" }
+  { id:"nexus",code:"00",title:"SYSTEM",eyebrow:"CONTROL PLANE",description:"Stan całego OSA Agent World: release proof, bezpieczeństwo, korelacja i gotowość systemu.",status:"CORE",metric:"SYSTEM ONLINE" },
+  { id:"agents",code:"01",title:"AGENTY",eyebrow:"RUNTIME + MISJE",description:"Tożsamość, misje, możliwości, polityki, portfele i weryfikowalne wykonanie agentów.",status:"CORE",metric:"KAI RUNTIME LIVE" },
+  { id:"defi",code:"02",title:"DEFI",eyebrow:"PŁYNNOŚĆ + SWAP",description:"Symulowane pule oraz testnetowe ścieżki wymiany i płynności powiązane z polityką wykonania.",status:"SIMULATED",metric:"SIM + TESTNET" },
+  { id:"bridge",code:"03",title:"BRIDGE",eyebrow:"CROSS-CHAIN",description:"Trasy transferów pomiędzy sieciami, ślady wykonania i testnetowy Wormhole.",status:"SIMULATED",metric:"WTT TESTNET" },
+  { id:"proof",code:"04",title:"DOWODY",eyebrow:"CLAIM ≠ PROOF",description:"Evidence, digesty, weryfikacja, tamper detection, settlement i reputacja w jednym przepływie.",status:"CORE",metric:"VERIFY + TAMPER" },
+  { id:"chain",code:"05",title:"CHAIN",eyebrow:"L1 / L2 / L3",description:"Genesis, bloki, wysokość łańcucha i anchory rozliczeniowe w stosie OSA Devnet.",status:"SIMULATED",metric:"OSA DEVNET" },
+  { id:"nodes",code:"06",title:"INFRA",eyebrow:"NETWORK MESH",description:"Walidatory, sequencer, RPC, indexer, relayer, proof node i agent nodes jako jedna topologia.",status:"SIMULATED",metric:"9 NODES ONLINE" },
+  { id:"market",code:"07",title:"RYNEK",eyebrow:"AGENT ECONOMY",description:"Usługi, skille, API, compute i dane odkrywane oraz opłacane przez policy-bound intents.",status:"SIMULATED",metric:"5 SERVICES" }
 ] as const;
 
 export type WorldEventType =
@@ -67,7 +67,7 @@ export interface WorldState {
   lastEvent: WorldEvent;
 }
 
-export const initialWorldEvent: WorldEvent = {id:"w_evt_0001",type:"world.booted",district:"nexus",label:"WORLD SHELL ONLINE",mode:"REAL"};
+export const initialWorldEvent: WorldEvent = {id:"w_evt_0001",type:"world.booted",district:"nexus",label:"CONTROL PLANE ONLINE",mode:"REAL"};
 
 export function reduceWorldState(state:WorldState,event:WorldEvent):WorldState {
   const isTeleport=event.type==="district.teleport.started"||event.type==="district.teleport.completed";

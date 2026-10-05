@@ -4,12 +4,12 @@ import { SolanaProvider } from "../lib/solana-provider";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "OSA Crypto World — Web4 Alpha",
-  description: "A living agentic Web3 world for chains, DeFi, agents, nodes and verifiable execution."
+  title: "OSA Agent World — Control Plane",
+  description: "Operacyjny widok agentów, łańcuchów, dowodów, rozliczeń i infrastruktury OSA."
 };
 
 export const viewport: Viewport = {
-  themeColor: "#05050a",
+  themeColor: "#000000",
   width: "device-width",
   initialScale: 1,
   maximumScale: 1
@@ -17,7 +17,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   return (
-    <html lang="en">
+    <html lang="pl">
       <body>
         <SolanaProvider>{children}</SolanaProvider>
       </body>

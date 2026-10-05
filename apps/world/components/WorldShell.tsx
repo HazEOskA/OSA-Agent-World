@@ -12,7 +12,6 @@ import { MarketZone } from "./MarketZone";
 import { ProofLab } from "./ProofLab";
 import { ReleasePanel } from "./ReleasePanel";
 import { ProtocolOverlay } from "./ProtocolOverlay";
-import { WorldScene } from "./WorldScene";
 import {
   initialWorldEvent,
   reduceWorldState,
@@ -34,17 +33,16 @@ function nextEventId(): string {
 }
 
 export function WorldShell() {
-  const [entered, setEntered] = useState(false);
-  const [identityOpen, setIdentityOpen] = useState(true);
+  const [identityOpen, setIdentityOpen] = useState(false);
   const [identity, setIdentity] = useState<OsaIdentity | null>(null);
   const [state, dispatch] = useReducer(reduceWorldState, initialState);
 
-  const teleport = useCallback((district: DistrictId) => {
+  const selectModule = useCallback((district: DistrictId) => {
     dispatch({
       id: nextEventId(),
       type: "district.teleport.started",
       district,
-      label: `TELEPORT / ${district.toUpperCase()}`,
+      label: `OTWIERANIE MODUŁU / ${district.toUpperCase()}`,
       mode: "REAL"
     });
     window.setTimeout(() => {
@@ -52,57 +50,33 @@ export function WorldShell() {
         id: nextEventId(),
         type: "district.teleport.completed",
         district,
-        label: `MATERIALIZED / ${district.toUpperCase()}`,
+        label: `MODUŁ AKTYWNY / ${district.toUpperCase()}`,
         mode: "REAL"
       });
-    }, 620);
+    }, 80);
   }, []);
 
   const ingestWorldEvent = useCallback((event: WorldEvent) => dispatch(event), []);
 
-  if (!entered) {
-    return (
-      <main className="entry-gate">
-        <div className="entry-grid" aria-hidden="true" />
-        <div className="entry-orbit orbit-one" aria-hidden="true" />
-        <div className="entry-orbit orbit-two" aria-hidden="true" />
-        <section className="entry-copy">
-          <div className="entry-kicker">OSA PROTOCOL // WORLD BOOT SEQUENCE</div>
-          <h1>ENTER THE<span>AGENTIC CRYPTO WORLD</span></h1>
-          <p>A living Web4 city where agents, chains, DeFi, nodes and verifiable execution become one spatial economy.</p>
-          <div className="entry-actions">
-            <button type="button" className="enter-button" onClick={() => { setEntered(true); setIdentityOpen(true); }}>
-              <span>ENTER WORLD</span><i>↗</i>
-            </button>
-            <div className="entry-state"><span>ALPHA</span><b>WORLD SHELL REAL</b><i>WEB3 + AGENTS + DEFI + BRIDGE</i></div>
-          </div>
-        </section>
-        <div className="entry-coordinate">51° // OSA NETWORK // WEB3 → WEB4</div>
-      </main>
-    );
-  }
-
-  const protocolPulse = [
-    "transaction.confirmed",
-    "defi.swap.confirmed",
-    "bridge.transfer.completed",
-    "agent.execution.completed",
-    "proof.verified",
-    "chain.snapshot.loaded",
-    "network.snapshot.loaded",
-    "market.snapshot.loaded",
-    "release.proof.loaded"
-  ].includes(state.lastEvent.type);
-
   return (
-    <main className={["world-shell", state.teleporting ? "teleporting" : "", protocolPulse ? "chain-confirmed" : ""].filter(Boolean).join(" ")}>
-      <WorldScene activeDistrict={state.activeDistrict} onSelect={teleport} />
-      <div className="world-vignette" aria-hidden="true" />
-      <div className="world-scanlines" aria-hidden="true" />
-      <div className="teleport-flash" aria-hidden="true" />
-      <div className="chain-pulse" aria-hidden="true" />
+    <main className="world-shell">
+      <ProtocolOverlay
+        activeDistrict={state.activeDistrict}
+        event={state.lastEvent}
+        onTeleport={selectModule}
+        onIdentity={() => setIdentityOpen(true)}
+      />
 
-      <ProtocolOverlay activeDistrict={state.activeDistrict} event={state.lastEvent} onTeleport={teleport} onIdentity={() => setIdentityOpen(true)} />
+      <section className="world-content" aria-label="OSA Agent World Control Plane">
+        <ReleasePanel active={!identityOpen && state.activeDistrict === "nexus"} onWorldEvent={ingestWorldEvent} />
+        <AgentDistrict active={!identityOpen && state.activeDistrict === "agents"} onWorldEvent={ingestWorldEvent} />
+        <DeFiTerminal active={!identityOpen && state.activeDistrict === "defi"} identity={identity} onWorldEvent={ingestWorldEvent} />
+        <BridgeTower active={!identityOpen && state.activeDistrict === "bridge"} identity={identity} onWorldEvent={ingestWorldEvent} />
+        <ProofLab active={!identityOpen && state.activeDistrict === "proof"} onWorldEvent={ingestWorldEvent} />
+        <ChainExplorer active={!identityOpen && state.activeDistrict === "chain"} onWorldEvent={ingestWorldEvent} />
+        <NodeGrid active={!identityOpen && state.activeDistrict === "nodes"} onWorldEvent={ingestWorldEvent} />
+        <MarketZone active={!identityOpen && state.activeDistrict === "market"} onWorldEvent={ingestWorldEvent} />
+      </section>
 
       <IdentityGate
         open={identityOpen}
@@ -110,15 +84,6 @@ export function WorldShell() {
         onWorldEvent={ingestWorldEvent}
         onIdentityChange={setIdentity}
       />
-
-      <AgentDistrict active={!identityOpen && state.activeDistrict === "agents"} onWorldEvent={ingestWorldEvent} />
-      <DeFiTerminal active={!identityOpen && state.activeDistrict === "defi"} identity={identity} onWorldEvent={ingestWorldEvent} />
-      <BridgeTower active={!identityOpen && state.activeDistrict === "bridge"} identity={identity} onWorldEvent={ingestWorldEvent} />
-      <ProofLab active={!identityOpen && state.activeDistrict === "proof"} onWorldEvent={ingestWorldEvent} />
-      <ChainExplorer active={!identityOpen && state.activeDistrict === "chain"} onWorldEvent={ingestWorldEvent} />
-      <NodeGrid active={!identityOpen && state.activeDistrict === "nodes"} onWorldEvent={ingestWorldEvent} />
-      <MarketZone active={!identityOpen && state.activeDistrict === "market"} onWorldEvent={ingestWorldEvent} />
-      <ReleasePanel active={!identityOpen && state.activeDistrict === "nexus"} onWorldEvent={ingestWorldEvent} />
     </main>
   );
 }

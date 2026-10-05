@@ -2,6 +2,23 @@
 
 import { districtById, districts, type DistrictId, type WorldEvent } from "../lib/world";
 
+const icons: Record<DistrictId,string> = {
+  nexus:"▲",
+  agents:"◇",
+  defi:"↯",
+  bridge:"⇄",
+  proof:"✓",
+  chain:"▦",
+  nodes:"⌘",
+  market:"$"
+};
+
+const modeLabel: Record<WorldEvent["mode"],string> = {
+  REAL:"REAL",
+  TESTNET:"TESTNET",
+  SIMULATED:"SYMULACJA"
+};
+
 export function ProtocolOverlay({
   activeDistrict,
   event,
@@ -19,53 +36,35 @@ export function ProtocolOverlay({
     <>
       <header className="world-header">
         <div className="brand-lockup">
-          <div className="brand-mark" aria-hidden="true">
-            <span />
-            <span />
-            <span />
-          </div>
+          <div className="brand-mark" aria-hidden="true">▲</div>
           <div>
-            <div className="eyebrow">OSA // CRYPTO WORLD</div>
-            <div className="brand-title">WEB4 ALPHA</div>
+            <div className="eyebrow">OSA AGENT WORLD</div>
+            <div className="brand-title">CONTROL PLANE</div>
           </div>
         </div>
 
-        <div className="network-rail" aria-label="Alpha network state">
+        <div className="network-rail" aria-label="Stan systemu">
           <span className="status-dot" />
-          <span>WORLD SHELL</span>
-          <b>REAL</b>
+          <span>SYSTEM</span><b>ONLINE</b>
           <span className="rail-divider" />
-          <span>WEB3 CORE</span>
-          <b className="testnet">TESTNET</b>
+          <span>CHAIN</span><b>DEVNET</b>
           <span className="rail-divider" />
-          <span>GOAL</span>
-          <b className="goal-complete">60/60</b>
-          <button type="button" className="identity-open" onClick={onIdentity}>
-            IDENTITY ↗
-          </button>
+          <span>RELEASE</span><b>60/60</b>
+          <button type="button" className="identity-open" onClick={onIdentity}>TOŻSAMOŚĆ ↗</button>
         </div>
       </header>
 
-      <aside className="district-copy">
-        <div className="district-code">{active.code}</div>
-        <div className="district-eyebrow">{active.eyebrow}</div>
-        <h1>{active.title}</h1>
-        <p>{active.description}</p>
+      <section className="system-flow" aria-label="Główny przepływ systemu">
+        {["AGENT","MISJA","AUTHORITY","EXECUTION","PROOF","SETTLEMENT"].map((step,index) => (
+          <div className="flow-step" key={step}>
+            <span>{String(index + 1).padStart(2,"0")}</span>
+            <strong>{step}</strong>
+            {index < 5 ? <i>→</i> : null}
+          </div>
+        ))}
+      </section>
 
-        <div className="world-signal">
-          <span>STATE</span>
-          <strong>{active.metric}</strong>
-          <i>{active.status}</i>
-        </div>
-      </aside>
-
-      <div className="event-telemetry" aria-live="polite">
-        <div className="telemetry-kicker">WORLD EVENT</div>
-        <strong>{event.label}</strong>
-        <span className={event.mode.toLowerCase()}>{event.mode}</span>
-      </div>
-
-      <nav className="portal-nav" aria-label="Teleport to district">
+      <nav className="portal-nav" aria-label="Moduły systemu">
         {districts.map((district) => (
           <button
             type="button"
@@ -73,17 +72,36 @@ export function ProtocolOverlay({
             className={activeDistrict === district.id ? "portal-link active" : "portal-link"}
             onClick={() => onTeleport(district.id)}
           >
-            <span>{district.code}</span>
-            <strong>{district.title.replace(" DISTRICT", "")}</strong>
-            <i>{district.status}</i>
+            <span className="module-icon" aria-hidden="true">{icons[district.id]}</span>
+            <span className="module-copy">
+              <b>{district.code}</b>
+              <strong>{district.title}</strong>
+              <i>{district.status === "CORE" ? "RDZEŃ" : "SYMULACJA"}</i>
+            </span>
           </button>
         ))}
       </nav>
 
-      <div className="command-hint">
-        <span>WORLD COMMAND</span>
-        <kbd>/</kbd>
-        <strong>TELEPORT</strong>
+      <section className="module-context">
+        <div>
+          <span className="district-eyebrow">{active.eyebrow}</span>
+          <h1>{active.title}</h1>
+          <p>{active.description}</p>
+        </div>
+        <div className="module-state">
+          <span>STAN MODUŁU</span>
+          <strong>{active.metric}</strong>
+          <i>{active.status === "CORE" ? "RDZEŃ SYSTEMU" : "WARSTWA SYMULOWANA / TESTNET"}</i>
+        </div>
+      </section>
+
+      <div className="event-telemetry" aria-live="polite">
+        <div>
+          <span>OSTATNIE ZDARZENIE</span>
+          <strong>{event.label}</strong>
+        </div>
+        <code>{event.type}</code>
+        <b>{modeLabel[event.mode]}</b>
       </div>
     </>
   );
