@@ -25,6 +25,21 @@ TASK 20–24:
 
 No asset value is moved.
 
+### Coco Swap simulation
+
+The Coco terminal uses integer base units (OSA_TEST: 18 decimals; USDC_TEST: 6)
+for quotes, swaps and simulated LP deposits and withdrawals. Swap and LP
+operations include minimum-output limits; excess amounts in an unbalanced LP
+deposit are not added to the pool. The UI's virtual pool and LP position remain
+in the current browser session only.
+
+For each operation, the API recalculates the result and produces an L3_DEFI
+block using a fresh in-memory OSA devnet instance. The displayed transaction
+and block hash describe that temporary model: they are not persisted, anchored,
+shared with the chain explorer, or proof of an on-chain settlement. The
+request supplies its own simulated pool and LP state and is not an
+authoritative account ledger. No Coco token or Solidity contract is deployed.
+
 ### TESTNET
 
 `@osa/defi-uniswap` integrates Ethereum Sepolia with Uniswap V3.

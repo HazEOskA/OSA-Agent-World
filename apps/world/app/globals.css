@@ -1406,6 +1406,66 @@ body { overflow: hidden; }
   overflow-wrap: anywhere;
 }
 
+.coco-simulator { color: #ecf4ef; }
+.coco-simulator .module-title strong { font-size: 13px; }
+.coco-simulator .module-title i { font-size: 10px; }
+.coco-intro {
+  margin: -8px 0 18px;
+  color: #a7b7b0;
+  font-size: 12px;
+  line-height: 1.5;
+}
+.coco-simulator .swap-pair label span { font-size: 10px; }
+.coco-simulator .swap-pair label strong { font-size: 16px; }
+.coco-simulator .swap-pair input { width: min(150px, 100%); font-size: 14px; }
+.coco-reverse {
+  grid-column: 1 / -1;
+  justify-self: start;
+  padding: 8px 0;
+  border: 0;
+  background: transparent;
+  color: #ffdb66;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.coco-controls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 18px;
+  color: #a7b7b0;
+  font-size: 11px;
+}
+.coco-controls select, .coco-amounts input {
+  border: 1px solid rgba(255, 219, 102, 0.25);
+  border-radius: 3px;
+  padding: 9px;
+  background: #091116;
+  color: #fff;
+  font-size: 13px;
+}
+.coco-controls span { margin-left: auto; }
+.coco-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.coco-actions .defi-action { min-height: 44px; font-size: 10px; line-height: 1.4; }
+.coco-simulator .quote-result strong { font-size: 16px; overflow-wrap: anywhere; }
+.coco-simulator .quote-result span, .coco-simulator .quote-result i { font-size: 10px; line-height: 1.5; }
+.coco-liquidity { margin-top: 22px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,.12); }
+.coco-amounts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.coco-amounts label { display: grid; gap: 6px; color: #a7b7b0; font-size: 10px; }
+.coco-amounts input { width: 100%; min-width: 0; }
+.coco-meta, .coco-status, .coco-chain {
+  margin-top: 14px;
+  color: #a7b7b0;
+  font-size: 11px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+.coco-status { color: #ffdb66; }
+.coco-chain { padding: 10px; background: rgba(255,255,255,.035); font-family: monospace; font-size: 10px; }
+.coco-simulator .defi-error { font-size: 12px; }
+
 .liquidity-core {
   padding: 20px 22px 22px;
 }
