@@ -1,19 +1,13 @@
 "use client";
 
 import {
-  ALPHA_LIQUIDITY_POOL,
-  createSimulatedLiquidityPosition,
-  quoteConstantProductSwap,
-  type LiquidityPosition,
-  type SimulatedSwapQuote
-} from "@osa/defi-core";
-import {
   executeSepoliaEthToUsdc,
   quoteSepoliaEthToUsdc,
   type UniswapSepoliaQuote
 } from "@osa/defi-uniswap";
 import { shortenAddress, type OsaIdentity } from "@osa/wallet-core";
-import { useMemo, useState } from "react";
+import { useState } from "react";
+import { CocoSwapSimulator } from "./CocoSwapSimulator";
 import type { WorldEvent } from "../lib/world";
 
 interface DeFiTerminalProps {
@@ -41,10 +35,6 @@ function message(error: unknown): string {
 }
 
 export function DeFiTerminal({ active, identity, onWorldEvent }: DeFiTerminalProps) {
-  const [simulationAmount, setSimulationAmount] = useState("1000");
-  const [simulationQuote, setSimulationQuote] = useState<SimulatedSwapQuote | null>(null);
-  const [position, setPosition] = useState<LiquidityPosition | null>(null);
-
   const [ethAmount, setEthAmount] = useState("0.001");
   const [liveQuote, setLiveQuote] = useState<UniswapSepoliaQuote | null>(null);
   const [liveState, setLiveState] = useState<"IDLE" | "QUOTING" | "READY" | "SUBMITTED" | "CONFIRMED" | "FAILED">("IDLE");
@@ -52,29 +42,6 @@ export function DeFiTerminal({ active, identity, onWorldEvent }: DeFiTerminalPro
   const [liveError, setLiveError] = useState<string | null>(null);
 
   const canExecuteLive = identity?.primaryWallet.kind === "EVM";
-
-  const poolPrice = useMemo(
-    () => ALPHA_LIQUIDITY_POOL.reserveB / ALPHA_LIQUIDITY_POOL.reserveA,
-    []
-  );
-
-  const simulate = () => {
-    const amount = Number(simulationAmount);
-    try {
-      const quote = quoteConstantProductSwap(ALPHA_LIQUIDITY_POOL, "OSA_TEST", amount, 50);
-      setSimulationQuote(quote);
-      onWorldEvent(event("defi.quote.created", "SIMULATED SWAP QUOTE", "SIMULATED"));
-    } catch (error) {
-      setSimulationQuote(null);
-      setLiveError(message(error));
-    }
-  };
-
-  const addSimulatedLiquidity = () => {
-    const next = createSimulatedLiquidityPosition(ALPHA_LIQUIDITY_POOL, 10_000, 5_000);
-    setPosition(next);
-    onWorldEvent(event("defi.liquidity.position.created", "LIQUIDITY POSITION CREATED", "SIMULATED"));
-  };
 
   const quoteLive = async () => {
     setLiveState("QUOTING");
@@ -139,49 +106,7 @@ export function DeFiTerminal({ active, identity, onWorldEvent }: DeFiTerminalPro
       </div>
 
       <div className="defi-columns">
-        <section className="defi-module simulation-module">
-          <div className="module-title">
-            <span>01</span>
-            <strong>OSA SWAP SIM</strong>
-            <i>SIMULATED</i>
-          </div>
-
-          <div className="swap-pair">
-            <label>
-              <span>FROM</span>
-              <strong>OSA_TEST</strong>
-            </label>
-            <input
-              value={simulationAmount}
-              onChange={(e) => setSimulationAmount(e.target.value)}
-              inputMode="decimal"
-            />
-            <div className="swap-arrow">↓</div>
-            <label>
-              <span>TO</span>
-              <strong>USDC_TEST</strong>
-            </label>
-          </div>
-
-          <div className="quote-strip">
-            <span>POOL</span>
-            <b>{ALPHA_LIQUIDITY_POOL.poolId}</b>
-            <span>MID PRICE</span>
-            <b>{poolPrice.toFixed(4)}</b>
-          </div>
-
-          {simulationQuote ? (
-            <div className="quote-result">
-              <span>EST. RECEIVE</span>
-              <strong>{simulationQuote.amountOut.toFixed(4)} USDC_TEST</strong>
-              <i>MIN {simulationQuote.minimumReceived.toFixed(4)}</i>
-            </div>
-          ) : null}
-
-          <button type="button" className="defi-action" onClick={simulate}>
-            GENERATE SIMULATION
-          </button>
-        </section>
+        <CocoSwapSimulator onWorldEvent={onWorldEvent} />
 
         <section className="defi-module live-module">
           <div className="module-title">
@@ -255,37 +180,6 @@ export function DeFiTerminal({ active, identity, onWorldEvent }: DeFiTerminalPro
         </section>
       </div>
 
-      <section className="liquidity-core">
-        <div className="module-title">
-          <span>03</span>
-          <strong>LIQUIDITY CORE</strong>
-          <i>SIMULATED POSITION MODEL</i>
-        </div>
-
-        {position ? (
-          <div className="position-visual">
-            <div className="position-orbit" aria-hidden="true">
-              <span />
-              <span />
-              <span />
-            </div>
-            <div className="position-data">
-              <span>{position.positionId}</span>
-              <strong>
-                {position.amountA.toLocaleString()} {position.assetA}
-              </strong>
-              <strong>
-                {position.amountB.toLocaleString()} {position.assetB}
-              </strong>
-              <i>POOL SHARE {position.shareBps / 100}%</i>
-            </div>
-          </div>
-        ) : (
-          <button type="button" className="liquidity-create" onClick={addSimulatedLiquidity}>
-            MATERIALIZE POSITION
-          </button>
-        )}
-      </section>
     </aside>
   );
 }
