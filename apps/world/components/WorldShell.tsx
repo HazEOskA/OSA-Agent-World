@@ -1,7 +1,7 @@
 "use client";
 
 import type { OsaIdentity } from "@osa/wallet-core";
-import { useCallback, useReducer, useState } from "react";
+import { useCallback, useEffect, useReducer, useState } from "react";
 import { AgentDistrict } from "./AgentDistrict";
 import { BridgeTower } from "./BridgeTower";
 import { ChainExplorer } from "./ChainExplorer";
@@ -13,6 +13,7 @@ import { ProofLab } from "./ProofLab";
 import { ReleasePanel } from "./ReleasePanel";
 import { ProtocolOverlay } from "./ProtocolOverlay";
 import { WorldScene } from "./WorldScene";
+import { CocoSwapSimulator } from "./CocoSwapSimulator";
 import {
   initialWorldEvent,
   reduceWorldState,
@@ -38,6 +39,26 @@ export function WorldShell() {
   const [identityOpen, setIdentityOpen] = useState(true);
   const [identity, setIdentity] = useState<OsaIdentity | null>(null);
   const [state, dispatch] = useReducer(reduceWorldState, initialState);
+  const [use2D, setUse2D] = useState(false);
+  const [showCocoSwap, setShowCocoSwap] = useState(false);
+  const [cocoSwapOpen, setCocoSwapOpen] = useState(false);
+
+  // Check WebGL support and mobile on mount
+  useEffect(() => {
+    const canvas = document.createElement('canvas');
+    const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+    if (!gl) {
+      setUse2D(true);
+    }
+    
+    const checkMobile = () => {
+      const isMobile = window.innerWidth <= 768;
+      setShowCocoSwap(isMobile);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const teleport = useCallback((district: DistrictId) => {
     dispatch({
@@ -60,6 +81,18 @@ export function WorldShell() {
 
   const ingestWorldEvent = useCallback((event: WorldEvent) => dispatch(event), []);
 
+  const toggle2DMode = useCallback(() => {
+    setUse2D(prev => !prev);
+  }, []);
+
+  const openCocoSwap = useCallback(() => {
+    setCocoSwapOpen(true);
+  }, []);
+
+  const closeCocoSwap = useCallback(() => {
+    setCocoSwapOpen(false);
+  }, []);
+
   if (!entered) {
     return (
       <main className="entry-gate">
@@ -72,12 +105,31 @@ export function WorldShell() {
           <p>A living Web4 city where agents, chains, DeFi, nodes and verifiable execution become one spatial economy.</p>
           <div className="entry-actions">
             <button type="button" className="enter-button" onClick={() => { setEntered(true); setIdentityOpen(true); }}>
-              <span>ENTER WORLD</span><i>↗</i>
+              <span>ENTER WORLD</span><i>&#8593;</i>
             </button>
             <div className="entry-state"><span>ALPHA</span><b>WORLD SHELL REAL</b><i>WEB3 + AGENTS + DEFI + BRIDGE</i></div>
           </div>
         </section>
-        <div className="entry-coordinate">51° // OSA NETWORK // WEB3 → WEB4</div>
+        <div className="entry-coordinate">51 // OSA NETWORK // WEB3 &#8594; WEB4</div>
+        
+        {showCocoSwap && (
+          <button 
+            type="button" 
+            className="coco-swap-float"
+            onClick={openCocoSwap}
+          >
+            COCO SWAP
+          </button>
+        )}
+        
+        {cocoSwapOpen && (
+          <div className="modal-overlay" onClick={closeCocoSwap}>
+            <div className="modal-content" onClick={e => e.stopPropagation()}>
+              <button type="button" className="modal-close" onClick={closeCocoSwap}>&times;</button>
+              <CocoSwapSimulator onWorldEvent={ingestWorldEvent} />
+            </div>
+          </div>
+        )}
       </main>
     );
   }
@@ -97,12 +149,28 @@ export function WorldShell() {
   return (
     <main className={["world-shell", state.teleporting ? "teleporting" : "", protocolPulse ? "chain-confirmed" : ""].filter(Boolean).join(" ")}>
       <WorldScene activeDistrict={state.activeDistrict} onSelect={teleport} />
+      
+      {use2D && (
+        <div className="webgl-warning">
+          <h3>2D Mode Active</h3>
+          <p>3D acceleration is disabled for better performance on your device.</p>
+          <button onClick={toggle2DMode}>Switch to 3D</button>
+        </div>
+      )}
+      
       <div className="world-vignette" aria-hidden="true" />
       <div className="world-scanlines" aria-hidden="true" />
       <div className="teleport-flash" aria-hidden="true" />
       <div className="chain-pulse" aria-hidden="true" />
 
-      <ProtocolOverlay activeDistrict={state.activeDistrict} event={state.lastEvent} onTeleport={teleport} onIdentity={() => setIdentityOpen(true)} />
+      <ProtocolOverlay 
+        activeDistrict={state.activeDistrict} 
+        event={state.lastEvent} 
+        onTeleport={teleport} 
+        onIdentity={() => setIdentityOpen(true)}
+        onToggle2D={toggle2DMode}
+        use2D={use2D}
+      />
 
       <IdentityGate
         open={identityOpen}
@@ -119,6 +187,25 @@ export function WorldShell() {
       <NodeGrid active={!identityOpen && state.activeDistrict === "nodes"} onWorldEvent={ingestWorldEvent} />
       <MarketZone active={!identityOpen && state.activeDistrict === "market"} onWorldEvent={ingestWorldEvent} />
       <ReleasePanel active={!identityOpen && state.activeDistrict === "nexus"} onWorldEvent={ingestWorldEvent} />
+      
+      {showCocoSwap && !identityOpen && (
+        <button 
+          type="button" 
+          className="coco-swap-float"
+          onClick={openCocoSwap}
+        >
+          COCO SWAP
+        </button>
+      )}
+      
+      {cocoSwapOpen && (
+        <div className="modal-overlay" onClick={closeCocoSwap}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
+            <button type="button" className="modal-close" onClick={closeCocoSwap}>&times;</button>
+            <CocoSwapSimulator onWorldEvent={ingestWorldEvent} />
+          </div>
+        </div>
+      )}
     </main>
   );
 }
