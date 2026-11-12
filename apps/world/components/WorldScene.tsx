@@ -11,7 +11,6 @@ const COLORS = {
   yellow: "#ffd700",
   gold: "#ffb900",
   yellowDim: "#ccaa00",
-  yellowBright: "#ffe45c",
   
   nexus: "#ffd700",
   agents: "#8a2be2",
@@ -22,13 +21,8 @@ const COLORS = {
   nodes: "#20d9ff",
   market: "#ff6600",
   
-  neonYellow: "#ffff00",
-  neonCyan: "#00ffff",
-  neonPurple: "#cc00ff",
-  
   buildingDark: "#1a1a1a",
   buildingMid: "#2a2a2a",
-  buildingLight: "#3a3a3a",
 };
 
 interface DistrictConfig {
@@ -147,16 +141,31 @@ const lookTargets: Record<DistrictId, THREE.Vector3> = {
   market: new THREE.Vector3(-18, 1, -15)
 };
 
+// Reusable component for creating line geometries
+function LineSegment({ start, end, color, opacity }: { 
+  start: [number, number, number]; 
+  end: [number, number, number]; 
+  color: string; 
+  opacity: number 
+}) {
+  return (
+    <mesh position={[
+      (start[0] + end[0]) / 2,
+      (start[1] + end[1]) / 2,
+      (start[2] + end[2]) / 2
+    ]}>
+      <boxGeometry args={[
+        Math.sqrt(Math.pow(end[0] - start[0], 2) + Math.pow(end[2] - start[2], 2)),
+        0.02,
+        0.02
+      ]} />
+      <meshBasicMaterial color={color} transparent opacity={opacity} />
+    </mesh>
+  );
+}
+
 // Cyberpunk Building
-function CyberpunkBuilding({
-  position,
-  width,
-  depth,
-  height,
-  color,
-  districtColor,
-  index
-}: {
+function CyberpunkBuilding(props: {
   position: [number, number, number];
   width: number;
   depth: number;
@@ -169,17 +178,18 @@ function CyberpunkBuilding({
   
   useFrame(({ clock }) => {
     if (!meshRef.current) return;
-    const time = clock.elapsedTime * 0.5 + index * 0.3;
+    const time = clock.elapsedTime * 0.5 + props.index * 0.3;
     const pulse = 0.8 + Math.sin(time) * 0.2;
-    meshRef.current.material.emissiveIntensity = pulse * 0.3;
+    const material = meshRef.current.material as THREE.MeshStandardMaterial;
+    material.emissiveIntensity = pulse * 0.3;
   });
 
   return (
-    <mesh ref={meshRef} position={position}>
-      <boxGeometry args={[width, height, depth]} />
+    <mesh ref={meshRef} position={props.position}>
+      <boxGeometry args={[props.width, props.height, props.depth]} />
       <meshStandardMaterial
-        color={color}
-        emissive={districtColor}
+        color={props.color}
+        emissive={props.districtColor}
         emissiveIntensity={0.2}
         metalness={0.3}
         roughness={0.7}
@@ -189,12 +199,7 @@ function CyberpunkBuilding({
 }
 
 // District Tower
-function DistrictTower({
-  position,
-  height,
-  color,
-  active
-}: {
+function DistrictTower(props: {
   position: [number, number, number];
   height: number;
   color: string;
@@ -209,25 +214,25 @@ function DistrictTower({
     }
     if (topRef.current) {
       const pulse = 1 + Math.sin(clock.elapsedTime * 2) * 0.05;
-      topRef.current.scale.setScalar(active ? pulse * 1.1 : pulse);
+      topRef.current.scale.setScalar(props.active ? pulse * 1.1 : pulse);
     }
   });
 
-  const segments = Math.floor(height / 2);
-  const segmentHeight = height / segments;
+  const segments = Math.floor(props.height / 2);
+  const segmentHeight = props.height / segments;
 
   return (
-    <group ref={groupRef} position={position}>
+    <group ref={groupRef} position={props.position}>
       {Array.from({ length: segments }).map((_, i) => {
         const segmentColor = i % 2 === 0 ? "#1a1a1a" : "#2a2a2a";
-        const yPos = (i + 0.5) * segmentHeight - height / 2;
+        const yPos = (i + 0.5) * segmentHeight - props.height / 2;
         return (
           <mesh key={i} position={[0, yPos, 0]}>
             <boxGeometry args={[1.2, segmentHeight * 0.95, 1.2]} />
             <meshStandardMaterial
               color={segmentColor}
-              emissive={color}
-              emissiveIntensity={active ? 0.4 : 0.15}
+              emissive={props.color}
+              emissiveIntensity={props.active ? 0.4 : 0.15}
               metalness={0.4}
               roughness={0.5}
             />
@@ -235,35 +240,29 @@ function DistrictTower({
         );
       })}
       
-      <mesh ref={topRef} position={[0, height / 2 + 0.2, 0]}>
+      <mesh ref={topRef} position={[0, props.height / 2 + 0.2, 0]}>
         <coneGeometry args={[1.8, 2, 32]} />
         <meshStandardMaterial
-          color={color}
-          emissive={color}
-          emissiveIntensity={active ? 2 : 0.8}
+          color={props.color}
+          emissive={props.color}
+          emissiveIntensity={props.active ? 2 : 0.8}
           metalness={0.6}
           roughness={0.3}
         />
       </mesh>
       
       <pointLight
-        color={color}
-        intensity={active ? 30 : 10}
+        color={props.color}
+        intensity={props.active ? 30 : 10}
         distance={20}
-        position={[0, height / 2 + 1, 0]}
+        position={[0, props.height / 2 + 1, 0]}
       />
     </group>
   );
 }
 
 // District Platform
-function DistrictPlatform({
-  position,
-  size,
-  color,
-  active,
-  onClick
-}: {
+function DistrictPlatform(props: {
   position: [number, number, number];
   size: [number, number, number];
   color: string;
@@ -276,32 +275,32 @@ function DistrictPlatform({
     if (platformRef.current) {
       const pulse = 1 + Math.sin(clock.elapsedTime * 1.5) * 0.02;
       platformRef.current.scale.set(
-        size[0] * (active ? pulse * 1.02 : pulse),
-        size[1],
-        size[2] * (active ? pulse * 1.02 : pulse)
+        props.size[0] * (props.active ? pulse * 1.02 : pulse),
+        props.size[1],
+        props.size[2] * (props.active ? pulse * 1.02 : pulse)
       );
     }
   });
 
   return (
-    <group position={position} onClick={onClick}>
+    <group position={props.position} onClick={props.onClick}>
       <mesh ref={platformRef}>
-        <boxGeometry args={[size[0], size[1], size[2]]} />
+        <boxGeometry args={[props.size[0], props.size[1], props.size[2]]} />
         <meshStandardMaterial
           color={COLORS.buildingDark}
-          emissive={color}
-          emissiveIntensity={active ? 0.3 : 0.1}
+          emissive={props.color}
+          emissiveIntensity={props.active ? 0.3 : 0.1}
           metalness={0.5}
           roughness={0.4}
         />
       </mesh>
       
-      <mesh position={[0, size[1] / 2 + 0.01, 0]}>
-        <boxGeometry args={[size[0] * 0.98, 0.02, size[2] * 0.98]} />
+      <mesh position={[0, props.size[1] / 2 + 0.01, 0]}>
+        <boxGeometry args={[props.size[0] * 0.98, 0.02, props.size[2] * 0.98]} />
         <meshBasicMaterial
-          color={color}
+          color={props.color}
           transparent
-          opacity={active ? 0.6 : 0.2}
+          opacity={props.active ? 0.6 : 0.2}
         />
       </mesh>
     </group>
@@ -309,15 +308,12 @@ function DistrictPlatform({
 }
 
 // Street Light
-function StreetLight({
-  position,
-  color
-}: {
+function StreetLight(props: {
   position: [number, number, number];
   color: string;
 }) {
   return (
-    <group position={position}>
+    <group position={props.position}>
       <mesh>
         <cylinderGeometry args={[0.03, 0.03, 3, 8]} />
         <meshStandardMaterial color="#333333" metalness={0.8} />
@@ -325,11 +321,11 @@ function StreetLight({
       
       <mesh position={[0, 1.5, 0]}>
         <sphereGeometry args={[0.15, 16, 16]} />
-        <meshBasicMaterial color={color} />
+        <meshBasicMaterial color={props.color} />
       </mesh>
       
       <pointLight
-        color={color}
+        color={props.color}
         intensity={2}
         distance={10}
         position={[0, 1.5, 0]}
@@ -338,87 +334,54 @@ function StreetLight({
   );
 }
 
-// Holographic Grid
+// Holographic Grid - simplified using box geometries
 function HolographicGrid() {
-  const lines = useMemo(() => {
-    const lines: JSX.Element[] = [];
-    const size = 50;
-    const spacing = 2;
-    
-    for (let i = -size; i <= size; i += spacing) {
-      lines.push(
-        <line key={`x-${i}`} position={[i, 0.01, 0]} rotation={[Math.PI / 2, 0, 0]}>
-          <bufferGeometry>
-            <bufferAttribute
-              attach="attributes-position"
-              array={new Float32Array([-size, 0, 0, size, 0, 0])}
-              count={2}
-              itemSize={3}
-            />
-          </bufferGeometry>
-          <lineBasicMaterial
-            color={COLORS.yellow}
-            transparent
-            opacity={0.15}
-          />
-        </line>
-      );
-      lines.push(
-        <line key={`z-${i}`} position={[0, 0.01, i]} rotation={[Math.PI / 2, Math.PI / 2, 0]}>
-          <bufferGeometry>
-            <bufferAttribute
-              attach="attributes-position"
-              array={new Float32Array([-size, 0, 0, size, 0, 0])}
-              count={2}
-              itemSize={3}
-            />
-          </bufferGeometry>
-          <lineBasicMaterial
-            color={COLORS.yellow}
-            transparent
-            opacity={0.15}
-          />
-        </line>
-      );
-    }
-    return lines;
-  }, []);
-
-  return <group>{lines}</group>;
+  const gridSize = 50;
+  const spacing = 2;
+  
+  return (
+    <group>
+      {Array.from({ length: Math.floor(gridSize * 2 / spacing) + 1 }).map((_, i) => {
+        const x = -gridSize + i * spacing;
+        return (
+          <mesh key={`x-${i}`} position={[x, 0.01, 0]}>
+            <boxGeometry args={[0.01, 0.01, gridSize * 2]} />
+            <meshBasicMaterial color={COLORS.yellow} transparent opacity={0.1} />
+          </mesh>
+        );
+      })}
+      {Array.from({ length: Math.floor(gridSize * 2 / spacing) + 1 }).map((_, i) => {
+        const z = -gridSize + i * spacing;
+        return (
+          <mesh key={`z-${i}`} position={[0, 0.01, z]}>
+            <boxGeometry args={[gridSize * 2, 0.01, 0.01]} />
+            <meshBasicMaterial color={COLORS.yellow} transparent opacity={0.1} />
+          </mesh>
+        );
+      })}
+    </group>
+  );
 }
 
 // Floating Particles
 function CyberpunkParticles() {
-  const particles = useMemo(() => {
+  const positions = useMemo(() => {
     const count = 200;
-    const positions = new Float32Array(count * 3);
-    
+    const data = new Float32Array(count * 3);
     for (let i = 0; i < count; i++) {
-      positions[i * 3] = (Math.random() - 0.5) * 60;
-      positions[i * 3 + 1] = Math.random() * 15 + 0.5;
-      positions[i * 3 + 2] = (Math.random() - 0.5) * 60;
+      data[i * 3] = (Math.random() - 0.5) * 60;
+      data[i * 3 + 1] = Math.random() * 15 + 0.5;
+      data[i * 3 + 2] = (Math.random() - 0.5) * 60;
     }
-    
-    return positions;
+    return data;
   }, []);
 
   return (
     <points>
       <bufferGeometry>
-        <bufferAttribute
-          attach="attributes-position"
-          array={particles}
-          count={particles.length / 3}
-          itemSize={3}
-        />
+        <bufferAttribute attach="attributes-position" args={[positions, 3]} />
       </bufferGeometry>
-      <pointsMaterial
-        color={COLORS.yellow}
-        size={0.05}
-        transparent
-        opacity={0.6}
-        sizeAttenuation
-      />
+      <pointsMaterial color={COLORS.yellow} size={0.05} transparent opacity={0.6} sizeAttenuation />
     </points>
   );
 }
@@ -473,100 +436,56 @@ function EnergyCore() {
       
       <mesh rotation={[Math.PI / 2, 0, 0]} position={[0, 0, 0]}>
         <torusGeometry args={[3, 0.02, 8, 96]} />
-        <meshBasicMaterial
-          color={COLORS.yellow}
-          transparent
-          opacity={0.4}
-        />
+        <meshBasicMaterial color={COLORS.yellow} transparent opacity={0.4} />
       </mesh>
       
       <mesh rotation={[Math.PI / 2, Math.PI / 4, 0]} position={[0, 0, 0]}>
         <torusGeometry args={[3.5, 0.015, 8, 96]} />
-        <meshBasicMaterial
-          color={COLORS.gold}
-          transparent
-          opacity={0.3}
-        />
+        <meshBasicMaterial color={COLORS.gold} transparent opacity={0.3} />
       </mesh>
     </group>
   );
 }
 
-// Roads connecting districts
+// Roads connecting districts - using simple box geometries as lines
 function RoadNetwork() {
-  const roads = useMemo(() => {
-    const roads: JSX.Element[] = [];
-    
-    const connections = [
-      [[0, 0.05, 0], [-12, 0.05, -8]],
-      [[0, 0.05, 0], [12, 0.05, -8]],
-      [[0, 0.05, 0], [0, 0.05, -18]],
-      [[-12, 0.05, -8], [-12, 0.05, -25]],
-      [[12, 0.05, -8], [12, 0.05, -25]],
-      [[0, 0.05, -18], [0, 0.05, -35]],
-      [[0, 0.05, -18], [-18, 0.05, -15]],
-    ];
-    
-    connections.forEach(([start, end], i) => {
-      const curve = new THREE.QuadraticBezierCurve3(
-        new THREE.Vector3(...start as [number, number, number]),
-        new THREE.Vector3(
-          (start[0] + end[0]) / 2,
-          0.5,
-          (start[2] + end[2]) / 2
-        ),
-        new THREE.Vector3(...end as [number, number, number])
-      );
-      
-      const points = curve.getPoints(50);
-      const positions = new Float32Array(points.length * 3);
-      points.forEach((p, idx) => {
-        positions[idx * 3] = p.x;
-        positions[idx * 3 + 1] = p.y;
-        positions[idx * 3 + 2] = p.z;
-      });
-      
-      roads.push(
-        <line key={i}>
-          <bufferGeometry>
-            <bufferAttribute
-              attach="attributes-position"
-              array={positions}
-              count={positions.length / 3}
-              itemSize={3}
-            />
-          </bufferGeometry>
-          <lineBasicMaterial
-            color={COLORS.yellowDim}
-            transparent
-            opacity={0.4}
-            linewidth={2}
-          />
-        </line>
-      );
-    });
-    
-    return roads;
-  }, []);
-
-  return <group>{roads}</group>;
+  const connections = [
+    [[0, 0.05, 0], [-12, 0.05, -8]],
+    [[0, 0.05, 0], [12, 0.05, -8]],
+    [[0, 0.05, 0], [0, 0.05, -18]],
+    [[-12, 0.05, -8], [-12, 0.05, -25]],
+    [[12, 0.05, -8], [12, 0.05, -25]],
+    [[0, 0.05, -18], [0, 0.05, -35]],
+    [[0, 0.05, -18], [-18, 0.05, -15]],
+  ];
+  
+  return (
+    <group>
+      {connections.map(([start, end], i) => (
+        <LineSegment
+          key={i}
+          start={start as [number, number, number]}
+          end={end as [number, number, number]}
+          color={COLORS.yellowDim}
+          opacity={0.4}
+        />
+      ))}
+    </group>
+  );
 }
 
 // Teleport Camera
-function TeleportCamera({ activeDistrict }: { activeDistrict: DistrictId }) {
+function TeleportCamera(props: { activeDistrict: DistrictId }) {
   const { camera } = useThree();
   useFrame(() => {
-    camera.position.lerp(cameraTargets[activeDistrict], 0.045);
-    camera.lookAt(lookTargets[activeDistrict]);
+    camera.position.lerp(cameraTargets[props.activeDistrict], 0.045);
+    camera.lookAt(lookTargets[props.activeDistrict]);
   });
   return null;
 }
 
 // Scene Content
-function Scene({
-  activeDistrict,
-  onSelect
-}: {
+function Scene(props: {
   activeDistrict: DistrictId;
   onSelect: (district: DistrictId) => void;
 }) {
@@ -585,7 +504,7 @@ function Scene({
       <directionalLight
         position={[-10, 20, -10]}
         intensity={1}
-        color={COLORS.neonCyan}
+        color="#00ffff"
       />
       
       <CyberpunkParticles />
@@ -594,7 +513,7 @@ function Scene({
       <EnergyCore />
       
       {districts.map((district) => {
-        const isActive = activeDistrict === district.id;
+        const isActive = props.activeDistrict === district.id;
         
         return (
           <group key={district.id}>
@@ -603,7 +522,7 @@ function Scene({
               size={district.size}
               color={district.color}
               active={isActive}
-              onClick={() => onSelect(district.id)}
+              onClick={() => props.onSelect(district.id)}
             />
             
             {Array.from({ length: district.buildingCount }).map((_, i) => {
@@ -671,7 +590,7 @@ function Scene({
         />
       </mesh>
       
-      <TeleportCamera activeDistrict={activeDistrict} />
+      <TeleportCamera activeDistrict={props.activeDistrict} />
     </>
   );
 }
@@ -703,7 +622,8 @@ export function WorldScene({ activeDistrict, onSelect }: WorldSceneProps) {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  const dpr = isMobile ? [1, 1.2] : [1, 1.8];
+  // Optimize for mobile - reduce quality
+  const dpr: [number, number] = isMobile ? [1, 1.2] : [1, 1.8];
 
   if (!hasWebGL) {
     return (
